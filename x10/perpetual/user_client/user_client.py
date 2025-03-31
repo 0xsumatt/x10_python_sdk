@@ -3,7 +3,7 @@ from datetime import datetime, timezone
 from decimal import Decimal
 from typing import Callable, Dict, List, Optional
 
-import aiohttp
+from aiosonic import HTTPClient
 from eth_account import Account
 from eth_account.messages import encode_defunct
 from eth_account.signers.local import LocalAccount
@@ -22,7 +22,7 @@ from x10.perpetual.user_client.onboarding import (
     get_onboarding_payload,
     get_sub_account_creation_payload,
 )
-from x10.utils.http import (  # WrappedApiResponse,; send_get_request,; send_patch_request,
+from x10.utils.http import (
     CLIENT_TIMEOUT,
     get_url,
     send_get_request,
@@ -47,7 +47,7 @@ class OnBoardedAccount:
 class UserClient:
     __endpoint_config: EndpointConfig
     __l1_private_key: Callable[[], str]
-    __session: Optional[aiohttp.ClientSession] = None
+    __client: Optional[HTTPClient] = None
 
     def __init__(
         self,
@@ -58,25 +58,29 @@ class UserClient:
         self.__endpoint_config = endpoint_config
         self.__l1_private_key = l1_private_key
 
-    def _get_url(self, base_url: str, path: str, *, query: Optional[Dict] = None, **path_params) -> str:
+    def _get_url(
+        self, base_url: str, path: str, *, query: Optional[Dict] = None, **path_params
+    ) -> str:
         return get_url(f"{base_url}{path}", query=query, **path_params)
 
-    async def get_session(self) -> aiohttp.ClientSession:
-        if self.__session is None:
-            created_session = aiohttp.ClientSession(timeout=CLIENT_TIMEOUT)
-            self.__session = created_session
+    async def get_client(self) -> HTTPClient:
+        if self.__client is None:
+            created_client = HTTPClient(timeout=CLIENT_TIMEOUT)
+            self.__client = created_client
 
-        return self.__session
+        return self.__client
 
-    async def close_session(self):
-        if self.__session:
-            await self.__session.close()
-            self.__session = None
+    async def close_client(self):
+        if self.__client:
+            await self.__client.shutdown()
+            self.__client = None
 
     async def onboard(self, referral_code: Optional[str] = None):
         signing_account: LocalAccount = Account.from_key(self.__l1_private_key())
         key_pair = get_l2_keys_from_l1_account(
-            l1_account=signing_account, account_index=0, signing_domain=self.__endpoint_config.signing_domain
+            l1_account=signing_account,
+            account_index=0,
+            signing_domain=self.__endpoint_config.signing_domain,
         )
         payload = get_onboarding_payload(
             signing_account,
@@ -86,16 +90,20 @@ class UserClient:
         )
         url = self._get_url(self.__endpoint_config.onboarding_url, path="/auth/onboard")
         onboarding_response = await send_post_request(
-            await self.get_session(), url, OnboardedClientModel, json=payload.to_json()
+            await self.get_client(), url, OnboardedClientModel, json=payload.to_json()
         )
 
         onboarded_client = onboarding_response.data
         if onboarded_client is None:
             raise ValueError("No account data returned from onboarding")
 
-        return OnBoardedAccount(account=onboarded_client.default_account, l2_key_pair=key_pair)
+        return OnBoardedAccount(
+            account=onboarded_client.default_account, l2_key_pair=key_pair
+        )
 
-    async def onboard_subaccount(self, account_index: int, description: str | None = None):
+    async def onboard_subaccount(
+        self, account_index: int, description: str | None = None
+    ):
         request_path = "/auth/onboard/subaccount"
         if description is None:
             description = f"Subaccount {account_index}"
@@ -125,7 +133,7 @@ class UserClient:
 
         try:
             onboarding_response = await send_post_request(
-                await self.get_session(),
+                await self.get_client(),
                 url,
                 AccountModel,
                 json=payload.to_json(),
@@ -136,10 +144,14 @@ class UserClient:
         except SubAccountExists:
             client_accounts = await self.get_accounts()
             account_with_index = [
-                account for account in client_accounts if account.account.account_index == account_index
+                account
+                for account in client_accounts
+                if account.account.account_index == account_index
             ]
             if not account_with_index:
-                raise SubAccountExists("Subaccount already exists but not found in client accounts")
+                raise SubAccountExists(
+                    "Subaccount already exists but not found in client accounts"
+                )
             onboarded_account = account_with_index[0].account
         if onboarded_account is None:
             raise ValueError("No account data returned from onboarding")
@@ -158,7 +170,9 @@ class UserClient:
             L1_MESSAGE_TIME_HEADER: auth_time_string,
         }
         url = self._get_url(self.__endpoint_config.onboarding_url, path=request_path)
-        response = await send_get_request(await self.get_session(), url, List[AccountModel], request_headers=headers)
+        response = await send_get_request(
+            await self.get_client(), url, List[AccountModel], request_headers=headers
+        )
         accounts = response.data or []
 
         return [
@@ -173,7 +187,9 @@ class UserClient:
             for account in accounts
         ]
 
-    async def create_account_api_key(self, account: AccountModel, description: str | None) -> str:
+    async def create_account_api_key(
+        self, account: AccountModel, description: str | None
+    ) -> str:
         request_path = "/api/v1/user/account/api-key"
         if description is None:
             description = "trading api key for account {}".format(account.id)
@@ -192,7 +208,7 @@ class UserClient:
         url = self._get_url(self.__endpoint_config.onboarding_url, path=request_path)
         request = ApiKeyRequestModel(description=description)
         response = await send_post_request(
-            await self.get_session(),
+            await self.get_client(),
             url,
             ApiKeyResponseModel,
             json=request.to_api_request_json(),
@@ -204,7 +220,11 @@ class UserClient:
         return response_data.key
 
     async def perform_l1_withdrawal(self) -> str:
-        return call_stark_perpetual_withdraw(config=self.__endpoint_config, get_eth_private_key=self.__l1_private_key)
+        return call_stark_perpetual_withdraw(
+            config=self.__endpoint_config, get_eth_private_key=self.__l1_private_key
+        )
 
     async def available_l1_withdrawal_balance(self) -> Decimal:
-        return call_stark_perpetual_withdraw_balance(self.__l1_private_key, self.__endpoint_config)
+        return call_stark_perpetual_withdraw_balance(
+            self.__l1_private_key, self.__endpoint_config
+        )

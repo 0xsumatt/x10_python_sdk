@@ -111,7 +111,9 @@ class OrderBook:
         loop = asyncio.get_running_loop()
 
         async def inner():
-            async with self.__stream_client.subscribe_to_orderbooks(self.__market_name) as stream:
+            async with self.__stream_client.subscribe_to_orderbooks(
+                self.__market_name
+            ) as stream:
                 async for event in stream:
                     if event.type == StreamDataType.SNAPSHOT.value:
                         self.init_orderbook(event.data)
@@ -141,7 +143,9 @@ class OrderBook:
             return None
 
     def __price_impact_notional(
-        self, notional: decimal.Decimal, levels: Iterable[Tuple[decimal.Decimal, OrderBookEntry]]
+        self,
+        notional: decimal.Decimal,
+        levels: Iterable[Tuple[decimal.Decimal, OrderBookEntry]],
     ):
         remaining_to_spend = notional
         total_amount = decimal.Decimal(0)
@@ -164,7 +168,11 @@ class OrderBook:
         average_price = weighted_sum / total_amount
         return ImpactDetails(price=average_price, amount=total_amount)
 
-    def __price_impact_qty(self, qty: decimal.Decimal, levels: Iterable[Tuple[decimal.Decimal, OrderBookEntry]]):
+    def __price_impact_qty(
+        self,
+        qty: decimal.Decimal,
+        levels: Iterable[Tuple[decimal.Decimal, OrderBookEntry]],
+    ):
         remaining_qty = qty
         total_amount = decimal.Decimal(0)
         total_spent = decimal.Decimal(0)
@@ -184,20 +192,26 @@ class OrderBook:
         average_price = total_spent / total_amount
         return ImpactDetails(price=average_price, amount=total_amount)
 
-    def calculate_price_impact_notional(self, notional: decimal.Decimal, side: str) -> ImpactDetails | None:
+    def calculate_price_impact_notional(
+        self, notional: decimal.Decimal, side: str
+    ) -> ImpactDetails | None:
         if notional <= 0:
             return None
         if side == "SELL":
             if not self._bid_prices:
                 return None
-            return self.__price_impact_notional(notional, reversed(self._bid_prices.items()))
+            return self.__price_impact_notional(
+                notional, reversed(self._bid_prices.items())
+            )
         elif side == "BUY":
             if not self._ask_prices:
                 return None
             return self.__price_impact_notional(notional, self._ask_prices.items())
         return None
 
-    def calculate_price_impact_qty(self, qty: decimal.Decimal, side: str) -> ImpactDetails | None:
+    def calculate_price_impact_qty(
+        self, qty: decimal.Decimal, side: str
+    ) -> ImpactDetails | None:
         if qty <= 0:
             return None
         if side == "SELL":

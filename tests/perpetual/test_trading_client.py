@@ -118,7 +118,9 @@ async def test_get_markets(aiohttp_server, create_btc_usd_market):
 
 
 @pytest.mark.asyncio
-async def test_get_asset_operations(aiohttp_server, create_asset_operations, create_trading_account):
+async def test_get_asset_operations(
+    aiohttp_server, create_asset_operations, create_trading_account
+):
     from x10.perpetual.trading_client import PerpetualTradingClient
 
     expected_operations = create_asset_operations()
@@ -127,14 +129,20 @@ async def test_get_asset_operations(aiohttp_server, create_asset_operations, cre
     )
 
     app = web.Application()
-    app.router.add_get("/user/assetOperations", serve_data(expected_response.model_dump_json()))
+    app.router.add_get(
+        "/user/assetOperations", serve_data(expected_response.model_dump_json())
+    )
 
     server = await aiohttp_server(app)
     url = f"http://{server.host}:{server.port}"
 
     stark_account = create_trading_account()
-    endpoint_config = endpoint_config = dataclasses.replace(TESTNET_CONFIG, api_base_url=url)
-    trading_client = PerpetualTradingClient(endpoint_config=endpoint_config, stark_account=stark_account)
+    endpoint_config = endpoint_config = dataclasses.replace(
+        TESTNET_CONFIG, api_base_url=url
+    )
+    trading_client = PerpetualTradingClient(
+        endpoint_config=endpoint_config, stark_account=stark_account
+    )
     operations = await trading_client.account.asset_operations()
 
     assert_that(operations.status, equal_to("OK"))

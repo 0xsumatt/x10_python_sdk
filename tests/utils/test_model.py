@@ -23,9 +23,13 @@ def test_model_should_parse_json_with_missing_optional_fields():
 
 
 def test_model_should_parse_json():
-    model = _TestModel.model_validate_json('{"market": "BTC-USD", "createdTime": 0, "expiryTime": 1}')
+    model = _TestModel.model_validate_json(
+        '{"market": "BTC-USD", "createdTime": 0, "expiryTime": 1}'
+    )
 
-    assert_that(model, equal_to(_TestModel(market="BTC-USD", created_time=0, expiry_time=1)))
+    assert_that(
+        model, equal_to(_TestModel(market="BTC-USD", created_time=0, expiry_time=1))
+    )
 
 
 def test_model_should_throw_error_when_field_is_modified():
@@ -34,4 +38,7 @@ def test_model_should_throw_error_when_field_is_modified():
     def try_to_modify_field():
         test_model.market = "ETH-USD"
 
-    assert_that(try_to_modify_field, raises(ValidationError, pattern=re.compile("Instance is frozen")))
+    assert_that(
+        try_to_modify_field,
+        raises(ValidationError, pattern=re.compile("Instance is frozen")),
+    )

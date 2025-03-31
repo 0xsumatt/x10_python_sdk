@@ -25,7 +25,12 @@ import json
 import math
 import os
 
-from starkware.crypto.signature.math_utils import ec_double, is_quad_residue, pi_as_string, sqrt_mod
+from starkware.crypto.signature.math_utils import (
+    ec_double,
+    is_quad_residue,
+    pi_as_string,
+    sqrt_mod,
+)
 
 # Field parameters.
 # Field prime chosen to be an arbitrary prime which is:
@@ -100,7 +105,9 @@ N_ECDSA_POINTS = 1
 N_HASH_POINTS = N_INPUTS * N_ELEMENT_BITS
 
 print("Generating points, this may take a while...")
-BETA, CONSTANT_POINTS = generate_constant_points(N_SHIFT_POINTS + N_ECDSA_POINTS + N_HASH_POINTS)
+BETA, CONSTANT_POINTS = generate_constant_points(
+    N_SHIFT_POINTS + N_ECDSA_POINTS + N_HASH_POINTS
+)
 assert BETA == 0x6F21413EFBE40DE150E596D72F7A8C5609AD26C15C915C1F4CDFCB99CEE9E89
 
 COPYRIGHT_STRING = """\
@@ -124,7 +131,9 @@ COPYRIGHT_STRING = """\
 AUTO_GENERATED_STRING = "The following data was auto-generated. PLEASE DO NOT EDIT."
 
 # Write generated parameters to file.
-PEDERSEN_HASH_POINT_FILENAME = os.path.join(os.path.dirname(__file__), "pedersen_params.json")
+PEDERSEN_HASH_POINT_FILENAME = os.path.join(
+    os.path.dirname(__file__), "pedersen_params.json"
+)
 open(PEDERSEN_HASH_POINT_FILENAME, "w").write(
     json.dumps(
         {

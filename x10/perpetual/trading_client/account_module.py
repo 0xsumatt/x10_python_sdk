@@ -32,17 +32,29 @@ class AccountModule(BaseModule):
         """
 
         url = self._get_url("/user/balance")
-        return await send_get_request(await self.get_session(), url, BalanceModel, api_key=self._get_api_key())
+        return await send_get_request(
+            await self.get_session(), url, BalanceModel, api_key=self._get_api_key()
+        )
 
     async def get_positions(
-        self, *, market_names: Optional[List[str]] = None, position_side: Optional[PositionSide] = None
+        self,
+        *,
+        market_names: Optional[List[str]] = None,
+        position_side: Optional[PositionSide] = None,
     ) -> WrappedApiResponse[List[PositionModel]]:
         """
         https://api.docs.extended.exchange/#get-positions
         """
 
-        url = self._get_url("/user/positions", query={"market": market_names, "side": position_side})
-        return await send_get_request(await self.get_session(), url, List[PositionModel], api_key=self._get_api_key())
+        url = self._get_url(
+            "/user/positions", query={"market": market_names, "side": position_side}
+        )
+        return await send_get_request(
+            await self.get_session(),
+            url,
+            List[PositionModel],
+            api_key=self._get_api_key(),
+        )
 
     async def get_positions_history(
         self,
@@ -57,10 +69,18 @@ class AccountModule(BaseModule):
 
         url = self._get_url(
             "/user/positions/history",
-            query={"market": market_names, "side": position_side, "cursor": cursor, "limit": limit},
+            query={
+                "market": market_names,
+                "side": position_side,
+                "cursor": cursor,
+                "limit": limit,
+            },
         )
         return await send_get_request(
-            await self.get_session(), url, List[PositionHistoryModel], api_key=self._get_api_key()
+            await self.get_session(),
+            url,
+            List[PositionHistoryModel],
+            api_key=self._get_api_key(),
         )
 
     async def get_open_orders(
@@ -77,7 +97,12 @@ class AccountModule(BaseModule):
             "/user/orders",
             query={"market": market_names, "type": order_type, "side": order_side},
         )
-        return await send_get_request(await self.get_session(), url, List[OpenOrderModel], api_key=self._get_api_key())
+        return await send_get_request(
+            await self.get_session(),
+            url,
+            List[OpenOrderModel],
+            api_key=self._get_api_key(),
+        )
 
     async def get_orders_history(
         self,
@@ -93,9 +118,20 @@ class AccountModule(BaseModule):
 
         url = self._get_url(
             "/user/orders/history",
-            query={"market": market_names, "type": order_type, "side": order_side, "cursor": cursor, "limit": limit},
+            query={
+                "market": market_names,
+                "type": order_type,
+                "side": order_side,
+                "cursor": cursor,
+                "limit": limit,
+            },
         )
-        return await send_get_request(await self.get_session(), url, List[OpenOrderModel], api_key=self._get_api_key())
+        return await send_get_request(
+            await self.get_session(),
+            url,
+            List[OpenOrderModel],
+            api_key=self._get_api_key(),
+        )
 
     async def get_trades(
         self,
@@ -113,26 +149,45 @@ class AccountModule(BaseModule):
         )
 
         return await send_get_request(
-            await self.get_session(), url, List[AccountTradeModel], api_key=self._get_api_key()
+            await self.get_session(),
+            url,
+            List[AccountTradeModel],
+            api_key=self._get_api_key(),
         )
 
-    async def get_fees(self, *, market_names: List[str]) -> WrappedApiResponse[List[TradingFeeModel]]:
+    async def get_fees(
+        self, *, market_names: List[str]
+    ) -> WrappedApiResponse[List[TradingFeeModel]]:
         """
         https://api.docs.extended.exchange/#get-fees
         """
 
         url = self._get_url("/user/fees", query={"market": market_names})
-        return await send_get_request(await self.get_session(), url, List[TradingFeeModel], api_key=self._get_api_key())
+        return await send_get_request(
+            await self.get_session(),
+            url,
+            List[TradingFeeModel],
+            api_key=self._get_api_key(),
+        )
 
-    async def get_leverage(self, market_names: List[str]) -> WrappedApiResponse[List[AccountLeverage]]:
+    async def get_leverage(
+        self, market_names: List[str]
+    ) -> WrappedApiResponse[List[AccountLeverage]]:
         """
         https://api.docs.extended.exchange/#get-current-leverage
         """
 
         url = self._get_url("/user/leverage", query={"market": market_names})
-        return await send_get_request(await self.get_session(), url, List[AccountLeverage], api_key=self._get_api_key())
+        return await send_get_request(
+            await self.get_session(),
+            url,
+            List[AccountLeverage],
+            api_key=self._get_api_key(),
+        )
 
-    async def update_leverage(self, market_name: str, leverage: Decimal) -> WrappedApiResponse[EmptyModel]:
+    async def update_leverage(
+        self, market_name: str, leverage: Decimal
+    ) -> WrappedApiResponse[EmptyModel]:
         """
         https://api.docs.extended.exchange/#update-leverage
         """
@@ -208,8 +263,12 @@ class AccountModule(BaseModule):
         url = self._get_url(
             "/user/assetOperations",
             query={
-                "type": [operation_type.name for operation_type in operations_type] if operations_type else None,
-                "status": [operation_status.name for operation_status in operations_status]
+                "type": [operation_type.name for operation_type in operations_type]
+                if operations_type
+                else None,
+                "status": [
+                    operation_status.name for operation_status in operations_status
+                ]
                 if operations_status
                 else None,
                 "startTime": start_time,
@@ -219,10 +278,15 @@ class AccountModule(BaseModule):
             },
         )
         return await send_get_request(
-            await self.get_session(), url, List[AssetOperationModel], api_key=self._get_api_key()
+            await self.get_session(),
+            url,
+            List[AssetOperationModel],
+            api_key=self._get_api_key(),
         )
 
-    async def deposit(self, amount: Decimal, get_eth_private_key: Callable[[], str]) -> str:
+    async def deposit(
+        self, amount: Decimal, get_eth_private_key: Callable[[], str]
+    ) -> str:
         stark_account = self.__stark_account
 
         if not stark_account:

@@ -43,7 +43,9 @@ class OrderManagementModule(BaseModule):
         """
 
         url = self._get_url("/user/order/<order_id>", order_id=order_id)
-        return await send_delete_request(await self.get_session(), url, EmptyModel, api_key=self._get_api_key())
+        return await send_delete_request(
+            await self.get_session(), url, EmptyModel, api_key=self._get_api_key()
+        )
 
     async def cancel_order_by_external_id(self, order_external_id: str):
         """
@@ -51,7 +53,9 @@ class OrderManagementModule(BaseModule):
         """
 
         url = self._get_url("/user/order", query={"externalId": order_external_id})
-        return await send_delete_request(await self.get_session(), url, EmptyModel, api_key=self._get_api_key())
+        return await send_delete_request(
+            await self.get_session(), url, EmptyModel, api_key=self._get_api_key()
+        )
 
     async def mass_cancel(
         self,

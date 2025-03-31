@@ -76,10 +76,16 @@ class BlockingTradingClient:
     def __init__(self, endpoint_config: EndpointConfig, account: StarkPerpetualAccount):
         self.__endpoint_config = endpoint_config
         self.__account = account
-        self.__market_module = MarketsInformationModule(endpoint_config, api_key=account.api_key)
-        self.__orders_module = OrderManagementModule(endpoint_config, api_key=account.api_key)
+        self.__market_module = MarketsInformationModule(
+            endpoint_config, api_key=account.api_key
+        )
+        self.__orders_module = OrderManagementModule(
+            endpoint_config, api_key=account.api_key
+        )
         self.__markets: Union[None, Dict[str, MarketModel]] = None
-        self.__stream_client: PerpetualStreamClient = PerpetualStreamClient(api_url=endpoint_config.stream_url)
+        self.__stream_client: PerpetualStreamClient = PerpetualStreamClient(
+            api_url=endpoint_config.stream_url
+        )
         self.__account_stream: Union[
             None,
             PerpetualStreamConnection[WrappedStreamResponse[AccountStreamDataModel]],
@@ -131,15 +137,21 @@ class BlockingTradingClient:
     async def cancel_order(self, order_id: int) -> TimedCancel:
         awaitable: Awaitable
         if order_id in self.__cancel_waiters:
-            awaitable = condition_to_awaitable(self.__cancel_waiters[order_id].condition)
+            awaitable = condition_to_awaitable(
+                self.__cancel_waiters[order_id].condition
+            )
         else:
             self.__cancel_waiters[order_id] = CancelWaiter(
                 asyncio.Condition(), start_nanos=time.time_ns(), end_nanos=None
             )
-            cancel_task = asyncio.create_task(self.__orders_module.cancel_order(order_id))
+            cancel_task = asyncio.create_task(
+                self.__orders_module.cancel_order(order_id)
+            )
             awaitable = asyncio.gather(
                 cancel_task,
-                asyncio.wait_for(condition_to_awaitable(self.__cancel_waiters[order_id].condition), 5),
+                asyncio.wait_for(
+                    condition_to_awaitable(self.__cancel_waiters[order_id].condition), 5
+                ),
                 return_exceptions=False,
             )
 
@@ -180,7 +192,11 @@ class BlockingTradingClient:
         if not self.__account_stream:
             await self.__stream_lock.acquire()
             if not self.__account_stream:
-                self.__account_stream = await self.__stream_client.subscribe_to_account_updates(self.__account.api_key)
+                self.__account_stream = (
+                    await self.__stream_client.subscribe_to_account_updates(
+                        self.__account.api_key
+                    )
+                )
                 self.__orders_task = asyncio.create_task(self.___order_stream())
             self.__stream_lock.release()
 
@@ -197,7 +213,9 @@ class BlockingTradingClient:
         if order.id in self.__order_waiters:
             raise ValueError(f"order with {order.id} hash already placed")
 
-        self.__order_waiters[order.id] = OrderWaiter(asyncio.Condition(), None, start_nanos=time.time_ns())
+        self.__order_waiters[order.id] = OrderWaiter(
+            asyncio.Condition(), None, start_nanos=time.time_ns()
+        )
         placed_order_task = asyncio.create_task(self.__orders_module.place_order(order))
         order_waiter = self.__order_waiters[order.id]
         if order_waiter.open_order:

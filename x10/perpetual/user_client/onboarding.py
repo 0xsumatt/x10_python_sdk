@@ -41,7 +41,9 @@ class AccountRegistration:
     action: str
 
     def __post_init__(self):
-        self.time_string = self.time.astimezone(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+        self.time_string = self.time.astimezone(timezone.utc).strftime(
+            "%Y-%m-%dT%H:%M:%SZ"
+        )
 
     def to_signable_message(self, signing_domain) -> SignableMessage:
         domain = {"name": signing_domain}
@@ -138,7 +140,9 @@ def get_registration_struct_to_sign(
     )
 
 
-def get_key_derivation_struct_to_sign(account_index: int, address: str, signing_domain: str) -> SignableMessage:
+def get_key_derivation_struct_to_sign(
+    account_index: int, address: str, signing_domain: str
+) -> SignableMessage:
     primary_type = "AccountCreation"
     domain = {"name": signing_domain}
     message = {
@@ -171,7 +175,9 @@ def get_private_key_from_eth_signature(eth_signature: str) -> int:
     return stark_sign.grind_key(int(r, 16), stark_sign.EC_ORDER)
 
 
-def get_l2_keys_from_l1_account(l1_account: LocalAccount, account_index: int, signing_domain: str) -> StarkKeyPair:
+def get_l2_keys_from_l1_account(
+    l1_account: LocalAccount, account_index: int, signing_domain: str
+) -> StarkKeyPair:
     struct = get_key_derivation_struct_to_sign(
         account_index=account_index,
         address=l1_account.address,
@@ -213,7 +219,11 @@ def get_onboarding_payload(
 
 
 def get_sub_account_creation_payload(
-    account_index: int, l1_address: str, key_pair: StarkKeyPair, description: str, time: datetime | None = None
+    account_index: int,
+    l1_address: str,
+    key_pair: StarkKeyPair,
+    description: str,
+    time: datetime | None = None,
 ):
     if time is None:
         time = datetime.now(timezone.utc)

@@ -15,11 +15,15 @@ class HumanReadableAmount:
     asset: Asset
 
     def to_l1_amount(self) -> "L1Amount":
-        converted_value = self.asset.convert_internal_quantity_to_l1_quantity(self.value)
+        converted_value = self.asset.convert_internal_quantity_to_l1_quantity(
+            self.value
+        )
         return L1Amount(converted_value, self.asset)
 
     def to_stark_amount(self, rounding_context: decimal.Context) -> "StarkAmount":
-        converted_value = self.asset.convert_human_readable_to_stark_quantity(self.value, rounding_context)
+        converted_value = self.asset.convert_human_readable_to_stark_quantity(
+            self.value, rounding_context
+        )
         return StarkAmount(converted_value, self.asset)
 
 
@@ -29,7 +33,9 @@ class L1Amount:
     asset: Asset
 
     def to_internal_amount(self) -> HumanReadableAmount:
-        converted_value = self.asset.convert_l1_quantity_to_internal_quantity(self.value)
+        converted_value = self.asset.convert_l1_quantity_to_internal_quantity(
+            self.value
+        )
         return HumanReadableAmount(converted_value, self.asset)
 
 

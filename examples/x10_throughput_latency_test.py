@@ -42,14 +42,20 @@ class TimeSeriesChunk:
     throughput: float
 
 
-async def clean_it(trading_client: PerpetualTradingClient, market_name: str | None = None):
+async def clean_it(
+    trading_client: PerpetualTradingClient, market_name: str | None = None
+):
     logger = logging.getLogger("placed_order_example")
     positions = await trading_client.account.get_positions()
     logger.info("Positions: %s", positions.to_pretty_json())
     balance = await trading_client.account.get_balance()
     logger.info("Balance: %s", balance.to_pretty_json())
-    open_orders = await trading_client.account.get_open_orders(market_names=[market_name] if market_name else None)
-    await trading_client.orders.mass_cancel(order_ids=[order.id for order in open_orders.data])
+    open_orders = await trading_client.account.get_open_orders(
+        market_names=[market_name] if market_name else None
+    )
+    await trading_client.orders.mass_cancel(
+        order_ids=[order.id for order in open_orders.data]
+    )
 
 
 async def setup_and_run(base: str = "BTC", queue: Optional[Queue] = None):
@@ -81,7 +87,9 @@ async def setup_and_run(base: str = "BTC", queue: Optional[Queue] = None):
             mark_price: ${position.mark_price} \
             leverage: {position.leverage}"
         )
-        print(f"consumed im: ${round((position.size * position.mark_price) / position.leverage, 2)}")
+        print(
+            f"consumed im: ${round((position.size * position.mark_price) / position.leverage, 2)}"
+        )
 
     await clean_it(trading_client)
 
@@ -100,17 +108,25 @@ async def setup_and_run(base: str = "BTC", queue: Optional[Queue] = None):
 
     await orderbook.start_orderbook()
 
-    def order_loop(idx: int, side: OrderSide, outbound_queue: Optional[Queue] = None) -> asyncio.Task:
+    def order_loop(
+        idx: int, side: OrderSide, outbound_queue: Optional[Queue] = None
+    ) -> asyncio.Task:
         side_adjustment = Decimal("-1") if side == OrderSide.BUY else Decimal("1")
         base_offset = side_adjustment * Decimal("0.02")
 
         async def inner():
             while True:
-                baseline_price = orderbook.best_bid() if side == OrderSide.BUY else orderbook.best_ask()
+                baseline_price = (
+                    orderbook.best_bid()
+                    if side == OrderSide.BUY
+                    else orderbook.best_ask()
+                )
                 if baseline_price:
                     order_price = round(
                         (baseline_price.price + baseline_price.price * base_offset)
-                        + side_adjustment * market.trading_config.min_price_change * idx,
+                        + side_adjustment
+                        * market.trading_config.min_price_change
+                        * idx,
                         market.trading_config.price_precision,
                     )
                     timed_place = await blocking_client.create_and_place_order(
@@ -128,7 +144,9 @@ async def setup_and_run(base: str = "BTC", queue: Optional[Queue] = None):
                             timed_place.operation_ms,
                         )
                     )
-                    timed_cancel = await blocking_client.cancel_order(order_id=timed_place.id)
+                    timed_cancel = await blocking_client.cancel_order(
+                        order_id=timed_place.id
+                    )
                     queue.put(
                         TimedOperation(
                             CANCEL,
@@ -174,7 +192,9 @@ if __name__ == "__main__":
     place_chunks: List[TimeSeriesChunk] = []
 
     q: "Queue[TimedOperation]" = Queue()
-    subprocesses = map(lambda market: Process(target=entry_point, args=[market, q]), markets)
+    subprocesses = map(
+        lambda market: Process(target=entry_point, args=[market, q]), markets
+    )
 
     for p in subprocesses:
         p.start()
@@ -184,13 +204,19 @@ if __name__ == "__main__":
 
     cancel_file = open("cancel.csv", "w")
     place_file = open("place.csv", "w")
-    cancels_csv = csv.DictWriter(cancel_file, fieldnames=list(TimeSeriesChunk.__annotations__.keys()))
-    places_csv = csv.DictWriter(place_file, fieldnames=list(TimeSeriesChunk.__annotations__.keys()))
+    cancels_csv = csv.DictWriter(
+        cancel_file, fieldnames=list(TimeSeriesChunk.__annotations__.keys())
+    )
+    places_csv = csv.DictWriter(
+        place_file, fieldnames=list(TimeSeriesChunk.__annotations__.keys())
+    )
 
     poison_pill = None
 
     def handle_operation(
-        new_operation: TimedOperation, list: List[TimedOperation], chunks: List[TimeSeriesChunk]
+        new_operation: TimedOperation,
+        list: List[TimedOperation],
+        chunks: List[TimeSeriesChunk],
     ) -> TimeSeriesChunk | None:
         list.append(new_operation)
         newest = new_operation.end_nanos
@@ -198,8 +224,14 @@ if __name__ == "__main__":
         if newest - oldest > NANOS_IN_SECOND:
             latencies = [operation.operation_ms for operation in list]
             mean_latency = round(sum(latencies) / len(latencies), 1)
-            latency_std_dev = round((sum((x - mean_latency) ** 2 for x in latencies) / len(latencies)) ** 0.5, 1)
-            throughput_per_second = round(len(list) / ((newest - oldest) / NANOS_IN_SECOND), 1)
+            latency_std_dev = round(
+                (sum((x - mean_latency) ** 2 for x in latencies) / len(latencies))
+                ** 0.5,
+                1,
+            )
+            throughput_per_second = round(
+                len(list) / ((newest - oldest) / NANOS_IN_SECOND), 1
+            )
             chunk = TimeSeriesChunk(
                 start_ns=oldest,
                 end_ns=newest,

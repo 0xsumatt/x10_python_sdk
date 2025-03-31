@@ -11,9 +11,13 @@ def create_orderbook_message():
             market="BTC-USD",
             bid=[
                 OrderbookQuantityModel(qty=Decimal("0.008"), price=Decimal("43547.00")),
-                OrderbookQuantityModel(qty=Decimal("0.007000"), price=Decimal("43548.00")),
+                OrderbookQuantityModel(
+                    qty=Decimal("0.007000"), price=Decimal("43548.00")
+                ),
             ],
-            ask=[OrderbookQuantityModel(qty=Decimal("0.008"), price=Decimal("43546.00"))],
+            ask=[
+                OrderbookQuantityModel(qty=Decimal("0.008"), price=Decimal("43546.00"))
+            ],
         ),
         ts=1704798222748,
         seq=570,

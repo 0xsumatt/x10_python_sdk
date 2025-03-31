@@ -52,7 +52,9 @@ class MarketsInformationModule(BaseModule):
         )
         return await send_get_request(await self.get_session(), url, List[CandleModel])
 
-    async def get_funding_rates_history(self, *, market_name: str, start_time: datetime, end_time: datetime):
+    async def get_funding_rates_history(
+        self, *, market_name: str, start_time: datetime, end_time: datetime
+    ):
         """
         https://api.docs.extended.exchange/#get-funding-rates-history
         """
@@ -65,7 +67,9 @@ class MarketsInformationModule(BaseModule):
                 "endTime": to_epoch_millis(end_time),
             },
         )
-        return await send_get_request(await self.get_session(), url, List[FundingRateModel])
+        return await send_get_request(
+            await self.get_session(), url, List[FundingRateModel]
+        )
 
     async def get_orderbook_snapshot(self, *, market_name: str):
         """
@@ -73,4 +77,6 @@ class MarketsInformationModule(BaseModule):
         """
 
         url = self._get_url("/info/markets/<market>/orderbook", market=market_name)
-        return await send_get_request(await self.get_session(), url, OrderbookUpdateModel)
+        return await send_get_request(
+            await self.get_session(), url, OrderbookUpdateModel
+        )
