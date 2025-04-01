@@ -80,7 +80,15 @@ class PerpetualTradingClient:
         await self.__account_module.close_session()
         await self.__order_management_module.close_session()
 
+<<<<<<< HEAD
     def __init__(self, endpoint_config: EndpointConfig, stark_account: StarkPerpetualAccount | None = None):
+=======
+    def __init__(
+        self,
+        endpoint_config: EndpointConfig,
+        stark_account: StarkPerpetualAccount | None = None,
+    ):
+>>>>>>> change-to-ruff
         api_key = stark_account.api_key if stark_account else None
 
         self.__markets = None
@@ -89,9 +97,21 @@ class PerpetualTradingClient:
             self.__stark_account = stark_account
 
         self.__info_module = InfoModule(endpoint_config)
+<<<<<<< HEAD
         self.__markets_info_module = MarketsInformationModule(endpoint_config, api_key=api_key)
         self.__account_module = AccountModule(endpoint_config, api_key=api_key, stark_account=stark_account)
         self.__order_management_module = OrderManagementModule(endpoint_config, api_key=api_key)
+=======
+        self.__markets_info_module = MarketsInformationModule(
+            endpoint_config, api_key=api_key
+        )
+        self.__account_module = AccountModule(
+            endpoint_config, api_key=api_key, stark_account=stark_account
+        )
+        self.__order_management_module = OrderManagementModule(
+            endpoint_config, api_key=api_key
+        )
+>>>>>>> change-to-ruff
 
     @property
     def info(self):

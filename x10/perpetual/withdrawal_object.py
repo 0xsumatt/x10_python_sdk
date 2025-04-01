@@ -15,7 +15,13 @@ SECONDS_IN_HOUR = 60 * 60
 def calc_expiration_timestamp():
     expire_time = utc_now() + timedelta(days=15)
     expire_time_with_buffer = expire_time + timedelta(days=14)
+<<<<<<< HEAD
     expire_time_with_buffer_as_hours = math.ceil(expire_time_with_buffer.timestamp() / SECONDS_IN_HOUR)
+=======
+    expire_time_with_buffer_as_hours = math.ceil(
+        expire_time_with_buffer.timestamp() / SECONDS_IN_HOUR
+    )
+>>>>>>> change-to-ruff
 
     return expire_time_with_buffer_as_hours
 
@@ -39,7 +45,13 @@ def create_withdrawal_object(
         expiration_timestamp=expiration_timestamp,
         amount=int(stark_amount),
     )
+<<<<<<< HEAD
     (withdrawal_signature_r, withdrawal_signature_s) = stark_account.sign(withdrawal_hash)
+=======
+    (withdrawal_signature_r, withdrawal_signature_s) = stark_account.sign(
+        withdrawal_hash
+    )
+>>>>>>> change-to-ruff
 
     settlement = StarkWithdrawalSettlement(
         amount=int(stark_amount),
@@ -55,4 +67,10 @@ def create_withdrawal_object(
         ),
     )
 
+<<<<<<< HEAD
     return PerpetualSlowWithdrawal(amount=amount, settlement=settlement, description=description)
+=======
+    return PerpetualSlowWithdrawal(
+        amount=amount, settlement=settlement, description=description
+    )
+>>>>>>> change-to-ruff

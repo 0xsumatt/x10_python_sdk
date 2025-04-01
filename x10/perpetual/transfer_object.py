@@ -25,7 +25,13 @@ def find_account_by_id(accounts: List[AccountModel], account_id: int):
 def calc_expiration_timestamp():
     expire_time = utc_now() + timedelta(days=7)
     expire_time_with_buffer = expire_time + timedelta(days=14)
+<<<<<<< HEAD
     expire_time_with_buffer_as_hours = math.ceil(expire_time_with_buffer.timestamp() / SECONDS_IN_HOUR)
+=======
+    expire_time_with_buffer_as_hours = math.ceil(
+        expire_time_with_buffer.timestamp() / SECONDS_IN_HOUR
+    )
+>>>>>>> change-to-ruff
 
     return expire_time_with_buffer_as_hours
 
@@ -66,8 +72,17 @@ def create_transfer_object(
         receiver_position_id=to_vault,
         receiver_public_key=int(to_l2_key, 16),
         sender_position_id=from_vault,
+<<<<<<< HEAD
         sender_public_key=from_l2_key if isinstance(from_l2_key, int) else int(from_l2_key, 16),
         signature=SettlementSignatureModel(r=transfer_signature_r, s=transfer_signature_s),
+=======
+        sender_public_key=from_l2_key
+        if isinstance(from_l2_key, int)
+        else int(from_l2_key, 16),
+        signature=SettlementSignatureModel(
+            r=transfer_signature_r, s=transfer_signature_s
+        ),
+>>>>>>> change-to-ruff
     )
 
     return OnChainPerpetualTransferModel(

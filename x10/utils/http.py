@@ -3,8 +3,13 @@ import re
 from enum import Enum
 from typing import Any, Dict, Generic, List, Optional, Sequence, Type, TypeVar, Union
 
+<<<<<<< HEAD
 import aiohttp
 from aiohttp import ClientResponse, ClientTimeout
+=======
+from aiosonic import HttpResponse, timeout, HTTPClient
+from aiosonic.timeout import Timeouts
+>>>>>>> change-to-ruff
 from pydantic import GetCoreSchemaHandler
 from pydantic_core import CoreSchema, core_schema
 
@@ -14,9 +19,17 @@ from x10.utils.log import get_logger
 from x10.utils.model import X10BaseModel
 
 LOGGER = get_logger(__name__)
+<<<<<<< HEAD
 CLIENT_TIMEOUT = ClientTimeout(total=DEFAULT_REQUEST_TIMEOUT_SECONDS)
 
 ApiResponseType = TypeVar("ApiResponseType", bound=Union[int, X10BaseModel, Sequence[X10BaseModel]])
+=======
+CLIENT_TIMEOUT = Timeouts(request_timeout=DEFAULT_REQUEST_TIMEOUT_SECONDS)
+
+ApiResponseType = TypeVar(
+    "ApiResponseType", bound=Union[int, X10BaseModel, Sequence[X10BaseModel]]
+)
+>>>>>>> change-to-ruff
 
 
 class RateLimitException(X10Error):
@@ -71,8 +84,17 @@ class StreamDataType(Enum):
     WITHDRAWAL = "WITHDRAWAL"
 
     @classmethod
+<<<<<<< HEAD
     def __get_pydantic_core_schema__(cls, _source_type: Any, _handler: GetCoreSchemaHandler) -> CoreSchema:
         return core_schema.no_info_plain_validator_function(lambda v: v if v in cls._value2member_map_ else cls.UNKNOWN)
+=======
+    def __get_pydantic_core_schema__(
+        cls, _source_type: Any, _handler: GetCoreSchemaHandler
+    ) -> CoreSchema:
+        return core_schema.no_info_plain_validator_function(
+            lambda v: v if v in cls._value2member_map_ else cls.UNKNOWN
+        )
+>>>>>>> change-to-ruff
 
 
 class WrappedStreamResponse(X10BaseModel, Generic[ApiResponseType]):
@@ -91,19 +113,41 @@ def parse_response_to_model(
     return WrappedApiResponse[model_class].model_validate_json(response_text)  # type: ignore[valid-type]
 
 
+<<<<<<< HEAD
 def get_url(template: str, *, query: Optional[Dict[str, str | List[str]]] = None, **path_params):
+=======
+def get_url(
+    template: str, *, query: Optional[Dict[str, str | List[str]]] = None, **path_params
+):
+>>>>>>> change-to-ruff
     def replace_path_param(match: re.Match[str]):
         matched_value = match.group(1)
         is_param_optional = matched_value.endswith("?")
         param_key = matched_value[:-1] if is_param_optional else matched_value
+<<<<<<< HEAD
         param_value = path_params.get(param_key, "") if is_param_optional else path_params[param_key]
+=======
+        param_value = (
+            path_params.get(param_key, "")
+            if is_param_optional
+            else path_params[param_key]
+        )
+>>>>>>> change-to-ruff
 
         return str(param_value) if param_value is not None else ""
 
     def serialize_query_param(param_key: str, param_value: Union[str, List[str]]):
         if isinstance(param_value, list):
             return itertools.chain.from_iterable(
+<<<<<<< HEAD
                 [serialize_query_param(param_key, item) for item in param_value if item is not None]
+=======
+                [
+                    serialize_query_param(param_key, item)
+                    for item in param_value
+                    if item is not None
+                ]
+>>>>>>> change-to-ruff
             )
         elif isinstance(param_value, Enum):
             return [f"{param_key}={param_value.value}"]
@@ -127,7 +171,11 @@ def get_url(template: str, *, query: Optional[Dict[str, str | List[str]]] = None
 
 
 async def send_get_request(
+<<<<<<< HEAD
     session: aiohttp.ClientSession,
+=======
+    client: HTTPClient,
+>>>>>>> change-to-ruff
     url: str,
     model_class: Type[ApiResponseType],
     *,
@@ -137,6 +185,7 @@ async def send_get_request(
 ) -> WrappedApiResponse[ApiResponseType]:
     headers = __get_headers(api_key=api_key, request_headers=request_headers)
     LOGGER.debug("Sending GET %s", url)
+<<<<<<< HEAD
     async with session.get(url, headers=headers) as response:
         response_text = await response.text()
         handle_known_errors(url, response_code_to_exception, response, response_text)
@@ -145,6 +194,16 @@ async def send_get_request(
 
 async def send_post_request(
     session: aiohttp.ClientSession,
+=======
+    response = await client.get(url, headers=headers)
+    response_text = await response.text()
+    handle_known_errors(url, response_code_to_exception, response, response_text)
+    return parse_response_to_model(response_text, model_class)
+
+
+async def send_post_request(
+    client: HTTPClient,
+>>>>>>> change-to-ruff
     url: str,
     model_class: Type[ApiResponseType],
     *,
@@ -155,6 +214,7 @@ async def send_post_request(
 ) -> WrappedApiResponse[ApiResponseType]:
     headers = __get_headers(api_key=api_key, request_headers=request_headers)
     LOGGER.debug("Sending POST %s, headers=%s", url, headers)
+<<<<<<< HEAD
     async with session.post(url, json=json, headers=headers) as response:
         response_text = await response.text()
         handle_known_errors(url, response_code_to_exception, response, response_text)
@@ -167,6 +227,22 @@ async def send_post_request(
 
 async def send_patch_request(
     session: aiohttp.ClientSession,
+=======
+    response = await client.post(url, json=json, headers=headers)
+    response_text = await response.text()
+    handle_known_errors(url, response_code_to_exception, response, response_text)
+    response_model = parse_response_to_model(response_text, model_class)
+    if (response_model.status != ResponseStatus.OK.value) or (
+        response_model.error is not None
+    ):
+        LOGGER.error("Error response from POST %s: %s", url, response_model.error)
+        raise ValueError(f"Error response from POST {url}: {response_model.error}")
+    return response_model
+
+
+async def send_patch_request(
+    client: HTTPClient,
+>>>>>>> change-to-ruff
     url: str,
     model_class: Type[ApiResponseType],
     *,
@@ -177,6 +253,7 @@ async def send_patch_request(
 ) -> WrappedApiResponse[ApiResponseType]:
     headers = __get_headers(api_key=api_key, request_headers=request_headers)
     LOGGER.debug("Sending PATCH %s, headers=%s, data=%s", url, headers, json)
+<<<<<<< HEAD
     async with session.patch(url, json=json, headers=headers) as response:
         response_text = await response.text()
         if response_text == "":
@@ -188,6 +265,19 @@ async def send_patch_request(
 
 async def send_delete_request(
     session: aiohttp.ClientSession,
+=======
+    response = await client.patch(url, json=json, headers=headers)
+    response_text = await response.text()
+    if response_text == "":
+        LOGGER.error("Empty HTTP %s response from PATCH %s", response.status, url)
+        response_text = '{"status": "OK"}'
+    handle_known_errors(url, response_code_to_exception, response, response_text)
+    return parse_response_to_model(response_text, model_class)
+
+
+async def send_delete_request(
+    client: HTTPClient,
+>>>>>>> change-to-ruff
     url: str,
     model_class: Type[ApiResponseType],
     *,
@@ -196,6 +286,7 @@ async def send_delete_request(
     response_code_to_exception: Optional[Dict[int, Type[Exception]]] = None,
 ):
     headers = __get_headers(api_key=api_key, request_headers=request_headers)
+<<<<<<< HEAD
     LOGGER.debug("Sending DELETE %s, headers=%s", url, headers)
     async with session.delete(url, headers=headers) as response:
         response_text = await response.text()
@@ -209,6 +300,25 @@ def handle_known_errors(
     if response.status == 401:
         LOGGER.error("Unauthorized response from POST %s: %s", url, response_text)
         raise NotAuthorizedException(f"Unauthorized response from POST {url}: {response_text}")
+=======
+    response = await client.delete(url, headers=headers)
+    response_text = await response.text()
+    handle_known_errors(url, response_code_to_exception, response, response_text)
+    return parse_response_to_model(response_text, model_class)
+
+
+def handle_known_errors(
+    url,
+    response_code_handler: Optional[Dict[int, Type[Exception]]],
+    response: HttpResponse,
+    response_text: str,
+):
+    if response.status == 401:
+        LOGGER.error("Unauthorized response from POST %s: %s", url, response_text)
+        raise NotAuthorizedException(
+            f"Unauthorized response from POST {url}: {response_text}"
+        )
+>>>>>>> change-to-ruff
 
     if response.status == 429:
         LOGGER.error("Rate limited response from POST %s: %s", url, response_text)
@@ -219,10 +329,21 @@ def handle_known_errors(
 
     if response.status > 299:
         LOGGER.error("Error response from POST %s: %s", url, response_text)
+<<<<<<< HEAD
         raise ValueError(f"Error response from POST {url}: code {response.status} - {response_text}")
 
 
 def __get_headers(*, api_key: Optional[str] = None, request_headers: Optional[Dict[str, str]] = None) -> Dict[str, str]:
+=======
+        raise ValueError(
+            f"Error response from POST {url}: code {response.status} - {response_text}"
+        )
+
+
+def __get_headers(
+    *, api_key: Optional[str] = None, request_headers: Optional[Dict[str, str]] = None
+) -> Dict[str, str]:
+>>>>>>> change-to-ruff
     headers = {
         RequestHeader.ACCEPT.value: "application/json",
         RequestHeader.CONTENT_TYPE.value: "application/json",

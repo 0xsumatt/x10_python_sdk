@@ -48,7 +48,13 @@ class PerpetualStreamClient:
         url = self.__get_url("/funding/<market?>", market=market_name)
         return self.__connect(url, WrappedStreamResponse[FundingRateModel])
 
+<<<<<<< HEAD
     def subscribe_to_candles(self, market_name: str, candle_type: CandleType, interval: CandleInterval):
+=======
+    def subscribe_to_candles(
+        self, market_name: str, candle_type: CandleType, interval: CandleInterval
+    ):
+>>>>>>> change-to-ruff
         """
         https://api.docs.extended.exchange/#candles-stream
         """
@@ -69,9 +75,23 @@ class PerpetualStreamClient:
         """
 
         url = self.__get_url("/account")
+<<<<<<< HEAD
         return self.__connect(url, WrappedStreamResponse[AccountStreamDataModel], api_key)
 
     def __get_url(self, path: str, *, query: Optional[Dict[str, str | List[str]]] = None, **path_params) -> str:
+=======
+        return self.__connect(
+            url, WrappedStreamResponse[AccountStreamDataModel], api_key
+        )
+
+    def __get_url(
+        self,
+        path: str,
+        *,
+        query: Optional[Dict[str, str | List[str]]] = None,
+        **path_params,
+    ) -> str:
+>>>>>>> change-to-ruff
         return get_url(f"{self.__api_url}{path}", query=query, **path_params)
 
     @staticmethod

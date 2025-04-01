@@ -36,7 +36,13 @@ order_loop_finished = False
 stream: Optional[PerpetualStreamConnection] = None
 
 
+<<<<<<< HEAD
 stark_account = StarkPerpetualAccount(vault=VAULT_ID, private_key=PRIVATE_KEY, public_key=PUBLIC_KEY, api_key=API_KEY)
+=======
+stark_account = StarkPerpetualAccount(
+    vault=VAULT_ID, private_key=PRIVATE_KEY, public_key=PUBLIC_KEY, api_key=API_KEY
+)
+>>>>>>> change-to-ruff
 
 
 async def build_markets_cache(trading_client: PerpetualTradingClient):
@@ -84,7 +90,13 @@ async def order_loop(
             await socket_connect_condition.wait()
 
     for _ in range(NUM_ORDERS_PER_PRICE_LEVEL):
+<<<<<<< HEAD
         (external_id, order_response) = await place_order(i, trading_client, markets_cache)
+=======
+        (external_id, order_response) = await place_order(
+            i, trading_client, markets_cache
+        )
+>>>>>>> change-to-ruff
         print(f"placed order {external_id}")
         condition = order_condtions.get(external_id)
         if condition:
@@ -102,10 +114,23 @@ async def place_order(
     markets_cache: dict[str, MarketModel],
 ) -> Tuple[str, WrappedApiResponse[PlacedOrderModel]]:
     should_buy = i % 2 == 0
+<<<<<<< HEAD
     price = Decimal("0.660") - Decimal("0.00" + str(i)) if should_buy else Decimal("0.6601") + Decimal("0.00" + str(i))
     order_side = OrderSide.BUY if should_buy else OrderSide.SELL
     market = markets_cache[ADA_USD_MARKET]
     new_order = create_order_object(stark_account, market, Decimal("100"), price, order_side)
+=======
+    price = (
+        Decimal("0.660") - Decimal("0.00" + str(i))
+        if should_buy
+        else Decimal("0.6601") + Decimal("0.00" + str(i))
+    )
+    order_side = OrderSide.BUY if should_buy else OrderSide.SELL
+    market = markets_cache[ADA_USD_MARKET]
+    new_order = create_order_object(
+        stark_account, market, Decimal("100"), price, order_side
+    )
+>>>>>>> change-to-ruff
     order_condtions[new_order.id] = asyncio.Condition()
     return new_order.id, await trading_client.orders.place_order(order=new_order)
 
@@ -117,7 +142,13 @@ async def clean_it():
     logger.info("Positions: %s", positions.to_pretty_json())
     balance = await trading_client.account.get_balance()
     logger.info("Balance: %s", balance.to_pretty_json())
+<<<<<<< HEAD
     open_orders = await trading_client.account.get_open_orders(market_names=[ADA_USD_MARKET])
+=======
+    open_orders = await trading_client.account.get_open_orders(
+        market_names=[ADA_USD_MARKET]
+    )
+>>>>>>> change-to-ruff
 
     def __cancel_order(order_id: int) -> Awaitable[WrappedApiResponse[EmptyModel]]:
         return trading_client.orders.cancel_order(order_id=order_id)

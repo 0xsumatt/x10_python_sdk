@@ -20,7 +20,13 @@ async def setup_and_run():
         api_key=api_key,
     )
 
+<<<<<<< HEAD
     client = BlockingTradingClient(endpoint_config=TESTNET_CONFIG, account=stark_account)
+=======
+    client = BlockingTradingClient(
+        endpoint_config=TESTNET_CONFIG, account=stark_account
+    )
+>>>>>>> change-to-ruff
 
     placed_order = await client.create_and_place_order(
         amount_of_synthetic=Decimal("1"),
