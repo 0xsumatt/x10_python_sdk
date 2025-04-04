@@ -32,13 +32,9 @@ async def clean_it(trading_client: PerpetualTradingClient):
     balance = await trading_client.account.get_balance()
     logger.info("Balance: %s", balance.to_pretty_json())
     open_orders = await trading_client.account.get_open_orders()
-<<<<<<< HEAD
-    await trading_client.orders.mass_cancel(order_ids=[order.id for order in open_orders.data])
-=======
     await trading_client.orders.mass_cancel(
         order_ids=[order.id for order in open_orders.data]
     )
->>>>>>> change-to-ruff
 
 
 async def setup_and_run():
@@ -61,13 +57,9 @@ async def setup_and_run():
             mark_price: ${position.mark_price} \
             leverage: {position.leverage}"
         )
-<<<<<<< HEAD
-        print(f"consumed im: ${round((position.size * position.mark_price) / position.leverage, 2)}")
-=======
         print(
             f"consumed im: ${round((position.size * position.mark_price) / position.leverage, 2)}"
         )
->>>>>>> change-to-ruff
 
     await clean_it(trading_client)
 
@@ -84,16 +76,6 @@ async def setup_and_run():
     await orderbook.start_orderbook()
 
     def order_loop(idx: int, side: OrderSide) -> asyncio.Task:
-<<<<<<< HEAD
-        offset = (Decimal("-1") if side == OrderSide.BUY else Decimal("1")) * Decimal(idx + 1)
-
-        async def inner():
-            while True:
-                baseline_price = orderbook.best_bid() if side == OrderSide.BUY else orderbook.best_ask()
-                if baseline_price:
-                    order_price = round(
-                        baseline_price.price + offset * baseline_price.price * Decimal("0.002"),
-=======
         offset = (Decimal("-1") if side == OrderSide.BUY else Decimal("1")) * Decimal(
             idx + 1
         )
@@ -109,7 +91,6 @@ async def setup_and_run():
                     order_price = round(
                         baseline_price.price
                         + offset * baseline_price.price * Decimal("0.002"),
->>>>>>> change-to-ruff
                         1,
                     )
                     placed_order = await blocking_client.create_and_place_order(
@@ -119,13 +100,9 @@ async def setup_and_run():
                         side=side,
                         post_only=True,
                     )
-<<<<<<< HEAD
-                    print(f"baseline: {baseline_price.price}, order: {order_price}, id: {placed_order.id}")
-=======
                     print(
                         f"baseline: {baseline_price.price}, order: {order_price}, id: {placed_order.id}"
                     )
->>>>>>> change-to-ruff
                     await blocking_client.cancel_order(order_id=placed_order.id)
                     await asyncio.sleep(0)
                 else:
@@ -133,17 +110,12 @@ async def setup_and_run():
 
         return asyncio.get_running_loop().create_task(inner())
 
-<<<<<<< HEAD
-    sell_tasks = list(map(lambda idx: order_loop(idx, OrderSide.SELL), range(NUM_PRICE_LEVELS)))
-    buy_tasks = list(map(lambda idx: order_loop(idx, OrderSide.BUY), range(NUM_PRICE_LEVELS)))
-=======
     sell_tasks = list(
         map(lambda idx: order_loop(idx, OrderSide.SELL), range(NUM_PRICE_LEVELS))
     )
     buy_tasks = list(
         map(lambda idx: order_loop(idx, OrderSide.BUY), range(NUM_PRICE_LEVELS))
     )
->>>>>>> change-to-ruff
 
     for task in sell_tasks:
         print(await task)

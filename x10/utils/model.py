@@ -27,14 +27,10 @@ class X10BaseModel(BaseModel):
             try:
                 attr = getattr(cls, key)
             except AttributeError:
-<<<<<<< HEAD
-                field_info = Field(validation_alias=AliasChoices(key, key_alias), serialization_alias=key_alias)
-=======
                 field_info = Field(
                     validation_alias=AliasChoices(key, key_alias),
                     serialization_alias=key_alias,
                 )
->>>>>>> change-to-ruff
                 setattr(cls, key, field_info)
             else:
                 if isinstance(attr, FieldInfo):

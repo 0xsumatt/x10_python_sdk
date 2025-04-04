@@ -35,13 +35,9 @@ from vendor.starkware.crypto.signature.math_utils import (
 )
 from vendor.starkware.python.math_utils import div_ceil
 
-<<<<<<< HEAD
-PEDERSEN_HASH_POINT_FILENAME = os.path.join(os.path.dirname(__file__), "pedersen_params.json")
-=======
 PEDERSEN_HASH_POINT_FILENAME = os.path.join(
     os.path.dirname(__file__), "pedersen_params.json"
 )
->>>>>>> change-to-ruff
 PEDERSEN_PARAMS = json.load(open(PEDERSEN_HASH_POINT_FILENAME))
 
 FIELD_PRIME = PEDERSEN_PARAMS["FIELD_PRIME"]
@@ -84,13 +80,9 @@ ECSignature = Tuple[int, int]
 
 class InvalidPublicKeyError(Exception):
     def __init__(self):
-<<<<<<< HEAD
-        super().__init__("Given x coordinate does not represent any point on the elliptic curve.")
-=======
         super().__init__(
             "Given x coordinate does not represent any point on the elliptic curve."
         )
->>>>>>> change-to-ruff
 
 
 def get_y_coordinate(stark_key_x_coordinate: int) -> int:
@@ -203,14 +195,10 @@ def mimic_ec_mult_air(m: int, point: ECPoint, shift_point: ECPoint) -> ECPoint:
 
 
 def is_point_on_curve(x: int, y: int) -> bool:
-<<<<<<< HEAD
-    return pow(y, 2, FIELD_PRIME) == (pow(x, 3, FIELD_PRIME) + ALPHA * x + BETA) % FIELD_PRIME
-=======
     return (
         pow(y, 2, FIELD_PRIME)
         == (pow(x, 3, FIELD_PRIME) + ALPHA * x + BETA) % FIELD_PRIME
     )
->>>>>>> change-to-ruff
 
 
 def is_valid_stark_private_key(private_key: int) -> bool:
@@ -297,13 +285,9 @@ def grind_key(key_seed: int, key_value_limit: int) -> int:  # type: ignore[retur
         # To conform with the JS implementation, convert integer to bytes using minimal amount of
         # bytes possible. We would like 0.to_bytes() to be b'\x00', so a minimal length of 1 is
         # enforced.
-<<<<<<< HEAD
-        return x.to_bytes(length=max(1, div_ceil(x.bit_length(), 8)), byteorder="big", signed=False)
-=======
         return x.to_bytes(
             length=max(1, div_ceil(x.bit_length(), 8)), byteorder="big", signed=False
         )
->>>>>>> change-to-ruff
 
     # Increment the index (salt) until the hash value falls in the range [0, max_allowed_value).
     for index in itertools.count():

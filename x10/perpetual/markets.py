@@ -51,12 +51,6 @@ class TradingConfigModel(X10BaseModel):
 
     @cached_property
     def quantity_precision(self) -> int:
-<<<<<<< HEAD
-        return abs(int(self.min_order_size_change.log10().to_integral_exact(ROUND_CEILING)))
-
-    def max_leverage_for_position_value(self, position_value: Decimal) -> Decimal:
-        filtered = [x for x in self.risk_factor_config if x.upper_bound >= position_value]
-=======
         return abs(
             int(self.min_order_size_change.log10().to_integral_exact(ROUND_CEILING))
         )
@@ -65,7 +59,6 @@ class TradingConfigModel(X10BaseModel):
         filtered = [
             x for x in self.risk_factor_config if x.upper_bound >= position_value
         ]
->>>>>>> change-to-ruff
         return filtered[0].max_leverage if filtered else Decimal(0)
 
     def max_position_value_for_leverage(self, leverage: Decimal) -> Decimal:

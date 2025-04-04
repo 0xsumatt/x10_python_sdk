@@ -40,13 +40,9 @@ def pedersen_hash(x: int, y: int) -> int:
     shift_point, P_0, P_1, P_2, P_3 are constant points generated from the digits of pi.
     """
     return (
-<<<<<<< HEAD
-        HASH_SHIFT_POINT + process_single_element(x, P_0, P_1) + process_single_element(y, P_2, P_3)
-=======
         HASH_SHIFT_POINT
         + process_single_element(x, P_0, P_1)
         + process_single_element(y, P_2, P_3)
->>>>>>> change-to-ruff
     ).x
 
 

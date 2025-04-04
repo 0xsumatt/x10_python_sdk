@@ -32,12 +32,6 @@ class AccountModule(BaseModule):
         """
 
         url = self._get_url("/user/balance")
-<<<<<<< HEAD
-        return await send_get_request(await self.get_session(), url, BalanceModel, api_key=self._get_api_key())
-
-    async def get_positions(
-        self, *, market_names: Optional[List[str]] = None, position_side: Optional[PositionSide] = None
-=======
         return await send_get_request(
             await self.get_session(), url, BalanceModel, api_key=self._get_api_key()
         )
@@ -47,16 +41,11 @@ class AccountModule(BaseModule):
         *,
         market_names: Optional[List[str]] = None,
         position_side: Optional[PositionSide] = None,
->>>>>>> change-to-ruff
     ) -> WrappedApiResponse[List[PositionModel]]:
         """
         https://api.docs.extended.exchange/#get-positions
         """
 
-<<<<<<< HEAD
-        url = self._get_url("/user/positions", query={"market": market_names, "side": position_side})
-        return await send_get_request(await self.get_session(), url, List[PositionModel], api_key=self._get_api_key())
-=======
         url = self._get_url(
             "/user/positions", query={"market": market_names, "side": position_side}
         )
@@ -66,7 +55,6 @@ class AccountModule(BaseModule):
             List[PositionModel],
             api_key=self._get_api_key(),
         )
->>>>>>> change-to-ruff
 
     async def get_positions_history(
         self,
@@ -81,12 +69,6 @@ class AccountModule(BaseModule):
 
         url = self._get_url(
             "/user/positions/history",
-<<<<<<< HEAD
-            query={"market": market_names, "side": position_side, "cursor": cursor, "limit": limit},
-        )
-        return await send_get_request(
-            await self.get_session(), url, List[PositionHistoryModel], api_key=self._get_api_key()
-=======
             query={
                 "market": market_names,
                 "side": position_side,
@@ -99,7 +81,6 @@ class AccountModule(BaseModule):
             url,
             List[PositionHistoryModel],
             api_key=self._get_api_key(),
->>>>>>> change-to-ruff
         )
 
     async def get_open_orders(
@@ -116,16 +97,12 @@ class AccountModule(BaseModule):
             "/user/orders",
             query={"market": market_names, "type": order_type, "side": order_side},
         )
-<<<<<<< HEAD
-        return await send_get_request(await self.get_session(), url, List[OpenOrderModel], api_key=self._get_api_key())
-=======
         return await send_get_request(
             await self.get_session(),
             url,
             List[OpenOrderModel],
             api_key=self._get_api_key(),
         )
->>>>>>> change-to-ruff
 
     async def get_orders_history(
         self,
@@ -141,11 +118,6 @@ class AccountModule(BaseModule):
 
         url = self._get_url(
             "/user/orders/history",
-<<<<<<< HEAD
-            query={"market": market_names, "type": order_type, "side": order_side, "cursor": cursor, "limit": limit},
-        )
-        return await send_get_request(await self.get_session(), url, List[OpenOrderModel], api_key=self._get_api_key())
-=======
             query={
                 "market": market_names,
                 "type": order_type,
@@ -160,7 +132,6 @@ class AccountModule(BaseModule):
             List[OpenOrderModel],
             api_key=self._get_api_key(),
         )
->>>>>>> change-to-ruff
 
     async def get_trades(
         self,
@@ -178,12 +149,6 @@ class AccountModule(BaseModule):
         )
 
         return await send_get_request(
-<<<<<<< HEAD
-            await self.get_session(), url, List[AccountTradeModel], api_key=self._get_api_key()
-        )
-
-    async def get_fees(self, *, market_names: List[str]) -> WrappedApiResponse[List[TradingFeeModel]]:
-=======
             await self.get_session(),
             url,
             List[AccountTradeModel],
@@ -193,17 +158,11 @@ class AccountModule(BaseModule):
     async def get_fees(
         self, *, market_names: List[str]
     ) -> WrappedApiResponse[List[TradingFeeModel]]:
->>>>>>> change-to-ruff
         """
         https://api.docs.extended.exchange/#get-fees
         """
 
         url = self._get_url("/user/fees", query={"market": market_names})
-<<<<<<< HEAD
-        return await send_get_request(await self.get_session(), url, List[TradingFeeModel], api_key=self._get_api_key())
-
-    async def get_leverage(self, market_names: List[str]) -> WrappedApiResponse[List[AccountLeverage]]:
-=======
         return await send_get_request(
             await self.get_session(),
             url,
@@ -214,17 +173,11 @@ class AccountModule(BaseModule):
     async def get_leverage(
         self, market_names: List[str]
     ) -> WrappedApiResponse[List[AccountLeverage]]:
->>>>>>> change-to-ruff
         """
         https://api.docs.extended.exchange/#get-current-leverage
         """
 
         url = self._get_url("/user/leverage", query={"market": market_names})
-<<<<<<< HEAD
-        return await send_get_request(await self.get_session(), url, List[AccountLeverage], api_key=self._get_api_key())
-
-    async def update_leverage(self, market_name: str, leverage: Decimal) -> WrappedApiResponse[EmptyModel]:
-=======
         return await send_get_request(
             await self.get_session(),
             url,
@@ -235,7 +188,6 @@ class AccountModule(BaseModule):
     async def update_leverage(
         self, market_name: str, leverage: Decimal
     ) -> WrappedApiResponse[EmptyModel]:
->>>>>>> change-to-ruff
         """
         https://api.docs.extended.exchange/#update-leverage
         """
@@ -311,17 +263,12 @@ class AccountModule(BaseModule):
         url = self._get_url(
             "/user/assetOperations",
             query={
-<<<<<<< HEAD
-                "type": [operation_type.name for operation_type in operations_type] if operations_type else None,
-                "status": [operation_status.name for operation_status in operations_status]
-=======
                 "type": [operation_type.name for operation_type in operations_type]
                 if operations_type
                 else None,
                 "status": [
                     operation_status.name for operation_status in operations_status
                 ]
->>>>>>> change-to-ruff
                 if operations_status
                 else None,
                 "startTime": start_time,
@@ -331,12 +278,6 @@ class AccountModule(BaseModule):
             },
         )
         return await send_get_request(
-<<<<<<< HEAD
-            await self.get_session(), url, List[AssetOperationModel], api_key=self._get_api_key()
-        )
-
-    async def deposit(self, amount: Decimal, get_eth_private_key: Callable[[], str]) -> str:
-=======
             await self.get_session(),
             url,
             List[AssetOperationModel],
@@ -346,7 +287,6 @@ class AccountModule(BaseModule):
     async def deposit(
         self, amount: Decimal, get_eth_private_key: Callable[[], str]
     ) -> str:
->>>>>>> change-to-ruff
         stark_account = self.__stark_account
 
         if not stark_account:

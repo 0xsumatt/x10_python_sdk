@@ -16,14 +16,6 @@ from x10.perpetual.user_client.user_client import UserClient
 async def on_board_example():
     environment_config = TESTNET_CONFIG
     eth_account: LocalAccount = Account.from_key("<your private key>")
-<<<<<<< HEAD
-    user_client = UserClient(endpoint_config=environment_config, l1_private_key=eth_account.key.hex)
-    onboarded_user = await user_client.onboard()
-    sub_account_1 = await user_client.onboard_subaccount(1, "sub account 1")
-
-    default_api_key = await user_client.create_account_api_key(onboarded_user.account, "trading api key")
-    account_1_api_key = await user_client.create_account_api_key(sub_account_1.account, "sub account 1 api key")
-=======
     user_client = UserClient(
         endpoint_config=environment_config, l1_private_key=eth_account.key.hex
     )
@@ -36,7 +28,6 @@ async def on_board_example():
     account_1_api_key = await user_client.create_account_api_key(
         sub_account_1.account, "sub account 1 api key"
     )
->>>>>>> change-to-ruff
 
     default_account_trading_client = PerpetualTradingClient(
         environment_config,
@@ -59,13 +50,9 @@ async def on_board_example():
     )
 
     call_erc20_approve(
-<<<<<<< HEAD
-        human_readable_amount=Decimal("1000"), get_eth_private_key=eth_account.key.hex, config=environment_config
-=======
         human_readable_amount=Decimal("1000"),
         get_eth_private_key=eth_account.key.hex,
         config=environment_config,
->>>>>>> change-to-ruff
     )
 
     await default_account_trading_client.account.deposit(
@@ -79,17 +66,11 @@ async def on_board_example():
         amount=Decimal("10"),
     )
 
-<<<<<<< HEAD
-    created_withdrawal_id = await default_account_trading_client.account.slow_withdrawal(
-        amount=Decimal("10"),
-        eth_address=eth_account.address,
-=======
     created_withdrawal_id = (
         await default_account_trading_client.account.slow_withdrawal(
             amount=Decimal("10"),
             eth_address=eth_account.address,
         )
->>>>>>> change-to-ruff
     )
 
     withdrawals = await default_account_trading_client.account.asset_operations(

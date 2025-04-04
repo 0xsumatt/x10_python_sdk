@@ -28,13 +28,9 @@ def import_pedersen_hash_func():
     except ImportError as e:
         from vendor.starkware.crypto.signature import pedersen_hash as ph_slow
 
-<<<<<<< HEAD
-        LOGGER.warning("COULD NOT IMPORT RUST CRYPTO - USING SLOW PYTHON PEDERSEN IMPL: %s", e.msg)
-=======
         LOGGER.warning(
             "COULD NOT IMPORT RUST CRYPTO - USING SLOW PYTHON PEDERSEN IMPL: %s", e.msg
         )
->>>>>>> change-to-ruff
 
         def _pedersen_hash(first: int, second: int) -> int:
             return ph_slow(first, second)
@@ -58,13 +54,9 @@ def import_sign_func():
     except ImportError as e:
         from vendor.starkware.crypto.signature import sign as __sign_slow
 
-<<<<<<< HEAD
-        LOGGER.warning("COULD NOT IMPORT RUST CRYPTO - USING SLOW PYTHON SIGN IMPL: %s", e.msg)
-=======
         LOGGER.warning(
             "COULD NOT IMPORT RUST CRYPTO - USING SLOW PYTHON SIGN IMPL: %s", e.msg
         )
->>>>>>> change-to-ruff
 
         def _sign(private_key: int, msg_hash: int) -> tuple[int, int]:
             return __sign_slow(priv_key=private_key, msg_hash=msg_hash)
@@ -261,13 +253,9 @@ def get_withdrawal_to_address_msg_without_bounds(
     packed_message = packed_message * 2**64 + amount
     packed_message = packed_message * 2**32 + expiration_timestamp
     packed_message = packed_message * 2**49  # Padding.
-<<<<<<< HEAD
-    return hash_function(hash_function(asset_id_collateral, eth_address_int), packed_message)
-=======
     return hash_function(
         hash_function(asset_id_collateral, eth_address_int), packed_message
     )
->>>>>>> change-to-ruff
 
 
 def get_limit_order_msg(
@@ -404,24 +392,16 @@ def hash_order(
     amount_collateral: StarkAmount = amounts.collateral_amount_internal.to_stark_amount(
         rounding_context=amounts.rounding_context
     )
-<<<<<<< HEAD
-    max_fee: StarkAmount = amounts.fee_amount_internal.to_stark_amount(rounding_context=ROUNDING_FEE_CONTEXT)
-=======
     max_fee: StarkAmount = amounts.fee_amount_internal.to_stark_amount(
         rounding_context=ROUNDING_FEE_CONTEXT
     )
->>>>>>> change-to-ruff
     synthetic_asset = amount_synthetic.asset
     collateral_asset = amount_collateral.asset
 
     expire_time_with_buffer = expiration_timestamp + timedelta(days=14)
-<<<<<<< HEAD
-    expire_time_with_buffer_as_hours = math.ceil(expire_time_with_buffer.timestamp() / SECONDS_IN_HOUR)
-=======
     expire_time_with_buffer_as_hours = math.ceil(
         expire_time_with_buffer.timestamp() / SECONDS_IN_HOUR
     )
->>>>>>> change-to-ruff
 
     return get_limit_order_msg(
         int(synthetic_asset.settlement_external_id, base=16),

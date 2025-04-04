@@ -33,11 +33,6 @@ def call_stark_perpetual_withdraw_balance(
     config: EndpointConfig,
 ) -> Decimal:
     signing_account: LocalAccount = Account.from_key(get_eth_private_key())
-<<<<<<< HEAD
-    web3_provider = Web3.HTTPProvider(config.chain_rpc_url, request_kwargs={"timeout": DEFAULT_API_TIMEOUT})
-    web3 = Web3(web3_provider)
-    checksum_asset_operations_address = Web3.to_checksum_address(config.asset_operations_contract)
-=======
     web3_provider = Web3.HTTPProvider(
         config.chain_rpc_url, request_kwargs={"timeout": DEFAULT_API_TIMEOUT}
     )
@@ -45,7 +40,6 @@ def call_stark_perpetual_withdraw_balance(
     checksum_asset_operations_address = Web3.to_checksum_address(
         config.asset_operations_contract
     )
->>>>>>> change-to-ruff
     asset_operations_contract = web3.eth.contract(
         address=checksum_asset_operations_address,
         abi=json.load(open(os.path.join(ABI_FOLDER, STARK_PERPETUAL_ABI), "r")),
@@ -54,13 +48,9 @@ def call_stark_perpetual_withdraw_balance(
         int(signing_account.address, 16), int(config.collateral_asset_on_chain_id, 16)
     ).call()
 
-<<<<<<< HEAD
-    asset_erc20_checksum_address = Web3.to_checksum_address(config.collateral_asset_contract)
-=======
     asset_erc20_checksum_address = Web3.to_checksum_address(
         config.collateral_asset_contract
     )
->>>>>>> change-to-ruff
     asset_erc20_contract = web3.eth.contract(
         address=asset_erc20_checksum_address,
         abi=json.load(open(os.path.join(ABI_FOLDER, ERC20_ABI), "r")),
@@ -74,11 +64,6 @@ def call_erc20_approve(
     get_eth_private_key: Callable[[], str],
     config: EndpointConfig,
 ) -> str:
-<<<<<<< HEAD
-    web3_provider = Web3.HTTPProvider(config.chain_rpc_url, request_kwargs={"timeout": DEFAULT_API_TIMEOUT})
-    web3 = Web3(web3_provider)
-    asset_erc20_checksum_address = Web3.to_checksum_address(config.collateral_asset_contract)
-=======
     web3_provider = Web3.HTTPProvider(
         config.chain_rpc_url, request_kwargs={"timeout": DEFAULT_API_TIMEOUT}
     )
@@ -86,19 +71,14 @@ def call_erc20_approve(
     asset_erc20_checksum_address = Web3.to_checksum_address(
         config.collateral_asset_contract
     )
->>>>>>> change-to-ruff
     asset_erc20_contract = web3.eth.contract(
         address=asset_erc20_checksum_address,
         abi=json.load(open(os.path.join(ABI_FOLDER, ERC20_ABI), "r")),
     )
     spender = Web3.to_checksum_address(config.asset_operations_contract)
-<<<<<<< HEAD
-    amount_to_approve = int(human_readable_amount * 10 ** asset_erc20_contract.functions.decimals().call())
-=======
     amount_to_approve = int(
         human_readable_amount * 10 ** asset_erc20_contract.functions.decimals().call()
     )
->>>>>>> change-to-ruff
     method = asset_erc20_contract.functions.approve(spender, amount_to_approve)
     signing_account: LocalAccount = Account.from_key(get_eth_private_key())
     LOGGER.info(
@@ -127,11 +107,6 @@ def call_stark_perpetual_deposit(
     LOGGER.info(
         f"Depositing into vault: {l2_vault}, l2_key: {l2_key}, amount: {human_readable_amount}, as l1 account: {signing_account.address}"  # noqa
     )
-<<<<<<< HEAD
-    web3_provider = Web3.HTTPProvider(config.chain_rpc_url, request_kwargs={"timeout": DEFAULT_API_TIMEOUT})
-    web3 = Web3(web3_provider)
-    checksum_asset_operations_address = Web3.to_checksum_address(config.asset_operations_contract)
-=======
     web3_provider = Web3.HTTPProvider(
         config.chain_rpc_url, request_kwargs={"timeout": DEFAULT_API_TIMEOUT}
     )
@@ -139,19 +114,14 @@ def call_stark_perpetual_deposit(
     checksum_asset_operations_address = Web3.to_checksum_address(
         config.asset_operations_contract
     )
->>>>>>> change-to-ruff
     asset_operations_contract = web3.eth.contract(
         address=checksum_asset_operations_address,
         abi=json.load(open(os.path.join(ABI_FOLDER, STARK_PERPETUAL_ABI), "r")),
     )
 
-<<<<<<< HEAD
-    asset_erc20_checksum_address = Web3.to_checksum_address(config.collateral_asset_contract)
-=======
     asset_erc20_checksum_address = Web3.to_checksum_address(
         config.collateral_asset_contract
     )
->>>>>>> change-to-ruff
     asset_erc20_contract = web3.eth.contract(
         address=asset_erc20_checksum_address,
         abi=json.load(open(os.path.join(ABI_FOLDER, ERC20_ABI), "r")),
@@ -193,12 +163,6 @@ def call_stark_perpetual_withdraw(
 ) -> str:
     signing_account: LocalAccount = Account.from_key(get_eth_private_key())
 
-<<<<<<< HEAD
-    web3_provider = Web3.HTTPProvider(config.chain_rpc_url, request_kwargs={"timeout": DEFAULT_API_TIMEOUT})
-    web3 = Web3(web3_provider)
-
-    checksum_contract_address = Web3.to_checksum_address(config.asset_operations_contract)
-=======
     web3_provider = Web3.HTTPProvider(
         config.chain_rpc_url, request_kwargs={"timeout": DEFAULT_API_TIMEOUT}
     )
@@ -207,7 +171,6 @@ def call_stark_perpetual_withdraw(
     checksum_contract_address = Web3.to_checksum_address(
         config.asset_operations_contract
     )
->>>>>>> change-to-ruff
     checksum_eth_address = Web3.to_checksum_address(signing_account.address)
 
     asset_operations_contract = web3.eth.contract(

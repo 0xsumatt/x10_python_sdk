@@ -28,11 +28,6 @@ def test_generate_valid_url_from_template():
             "/info/candles?param1=value1&param2=value2_1&param2=value2_2&param4=0&param5=False&param6=VALUE_1&param7=VALUE_1&param7=VALUE_2"  # noqa: E501
         ),
     )
-<<<<<<< HEAD
-    assert_that(get_url("/info/candles/<market>", market="BTC-USD"), equal_to("/info/candles/BTC-USD"))
-    assert_that(
-        get_url("/info/candles/<market>/<candle_type>", market="BTC-USD", candle_type="trades"),
-=======
     assert_that(
         get_url("/info/candles/<market>", market="BTC-USD"),
         equal_to("/info/candles/BTC-USD"),
@@ -43,15 +38,10 @@ def test_generate_valid_url_from_template():
             market="BTC-USD",
             candle_type="trades",
         ),
->>>>>>> change-to-ruff
         equal_to("/info/candles/BTC-USD/trades"),
     )
     assert_that(lambda: get_url("/info/candles/<market>"), raises(KeyError))
     assert_that(get_url("/info/candles/<market?>"), equal_to("/info/candles"))
-<<<<<<< HEAD
-    assert_that(get_url("/info/candles/<market?>", market="BTC-USD"), equal_to("/info/candles/BTC-USD"))
-    assert_that(get_url("/info/candles/<market?>", market=None), equal_to("/info/candles"))
-=======
     assert_that(
         get_url("/info/candles/<market?>", market="BTC-USD"),
         equal_to("/info/candles/BTC-USD"),
@@ -59,4 +49,3 @@ def test_generate_valid_url_from_template():
     assert_that(
         get_url("/info/candles/<market?>", market=None), equal_to("/info/candles")
     )
->>>>>>> change-to-ruff
