@@ -88,12 +88,6 @@ def __create_order_object(
 
     nonce = generate_nonce()
     is_buying_synthetic = side == OrderSide.BUY
-<<<<<<< HEAD
-    rounding_context = ROUNDING_BUY_CONTEXT if is_buying_synthetic else ROUNDING_SELL_CONTEXT
-
-    collateral_amount_human = HumanReadableAmount(synthetic_amount * price, market.collateral_asset)
-    synthetic_amount_human = HumanReadableAmount(synthetic_amount, market.synthetic_asset)
-=======
     rounding_context = (
         ROUNDING_BUY_CONTEXT if is_buying_synthetic else ROUNDING_SELL_CONTEXT
     )
@@ -104,7 +98,6 @@ def __create_order_object(
     synthetic_amount_human = HumanReadableAmount(
         synthetic_amount, market.synthetic_asset
     )
->>>>>>> change-to-ruff
 
     fee = HumanReadableAmount(
         fees.taker_fee_rate * collateral_amount_human.value,
@@ -119,11 +112,6 @@ def __create_order_object(
         rounding_context=rounding_context,
     )
     debugging_amounts = StarkDebuggingOrderAmountsModel(
-<<<<<<< HEAD
-        collateral_amount=Decimal(amounts.collateral_amount_internal.to_stark_amount(amounts.rounding_context).value),
-        fee_amount=Decimal(amounts.fee_amount_internal.to_stark_amount(ROUNDING_FEE_CONTEXT).value),
-        synthetic_amount=Decimal(amounts.synthetic_amount_internal.to_stark_amount(amounts.rounding_context).value),
-=======
         collateral_amount=Decimal(
             amounts.collateral_amount_internal.to_stark_amount(
                 amounts.rounding_context
@@ -137,7 +125,6 @@ def __create_order_object(
                 amounts.rounding_context
             ).value
         ),
->>>>>>> change-to-ruff
     )
 
     order_hash = hash_order(
