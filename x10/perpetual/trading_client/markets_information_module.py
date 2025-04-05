@@ -17,7 +17,7 @@ class MarketsInformationModule(BaseModule):
         """
 
         url = self._get_url("/info/markets", query={"market": market_names})
-        return await send_get_request(await self.get_session(), url, List[MarketModel])
+        return await send_get_request(await self.get_client(), url, List[MarketModel])
 
     async def get_market_statistics(self, *, market_name: str):
         """
@@ -25,7 +25,7 @@ class MarketsInformationModule(BaseModule):
         """
 
         url = self._get_url("/info/markets/<market>/stats", market=market_name)
-        return await send_get_request(await self.get_session(), url, MarketStatsModel)
+        return await send_get_request(await self.get_client(), url, MarketStatsModel)
 
     async def get_candles_history(
         self,
@@ -50,7 +50,7 @@ class MarketsInformationModule(BaseModule):
                 "endTime": to_epoch_millis(end_time) if end_time else None,
             },
         )
-        return await send_get_request(await self.get_session(), url, List[CandleModel])
+        return await send_get_request(await self.get_client(), url, List[CandleModel])
 
     async def get_funding_rates_history(
         self, *, market_name: str, start_time: datetime, end_time: datetime
@@ -78,5 +78,5 @@ class MarketsInformationModule(BaseModule):
 
         url = self._get_url("/info/markets/<market>/orderbook", market=market_name)
         return await send_get_request(
-            await self.get_session(), url, OrderbookUpdateModel
+            await self.get_client(), url, OrderbookUpdateModel
         )

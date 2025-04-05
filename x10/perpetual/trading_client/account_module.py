@@ -33,7 +33,7 @@ class AccountModule(BaseModule):
 
         url = self._get_url("/user/balance")
         return await send_get_request(
-            await self.get_session(), url, BalanceModel, api_key=self._get_api_key()
+            await self.get_client(), url, BalanceModel, api_key=self._get_api_key()
         )
 
     async def get_positions(
@@ -50,7 +50,7 @@ class AccountModule(BaseModule):
             "/user/positions", query={"market": market_names, "side": position_side}
         )
         return await send_get_request(
-            await self.get_session(),
+            await self.get_client(),
             url,
             List[PositionModel],
             api_key=self._get_api_key(),
@@ -77,7 +77,7 @@ class AccountModule(BaseModule):
             },
         )
         return await send_get_request(
-            await self.get_session(),
+            await self.get_client(),
             url,
             List[PositionHistoryModel],
             api_key=self._get_api_key(),
@@ -98,7 +98,7 @@ class AccountModule(BaseModule):
             query={"market": market_names, "type": order_type, "side": order_side},
         )
         return await send_get_request(
-            await self.get_session(),
+            await self.get_client(),
             url,
             List[OpenOrderModel],
             api_key=self._get_api_key(),
@@ -127,7 +127,7 @@ class AccountModule(BaseModule):
             },
         )
         return await send_get_request(
-            await self.get_session(),
+            await self.get_client(),
             url,
             List[OpenOrderModel],
             api_key=self._get_api_key(),
@@ -149,7 +149,7 @@ class AccountModule(BaseModule):
         )
 
         return await send_get_request(
-            await self.get_session(),
+            await self.get_client(),
             url,
             List[AccountTradeModel],
             api_key=self._get_api_key(),
@@ -164,7 +164,7 @@ class AccountModule(BaseModule):
 
         url = self._get_url("/user/fees", query={"market": market_names})
         return await send_get_request(
-            await self.get_session(),
+            await self.get_client(),
             url,
             List[TradingFeeModel],
             api_key=self._get_api_key(),
@@ -179,7 +179,7 @@ class AccountModule(BaseModule):
 
         url = self._get_url("/user/leverage", query={"market": market_names})
         return await send_get_request(
-            await self.get_session(),
+            await self.get_client(),
             url,
             List[AccountLeverage],
             api_key=self._get_api_key(),
@@ -195,7 +195,7 @@ class AccountModule(BaseModule):
         url = self._get_url("/user/leverage")
         request_model = AccountLeverage(market=market_name, leverage=leverage)
         return await send_patch_request(
-            await self.get_session(),
+            await self.get_client(),
             url,
             EmptyModel,
             json=request_model.to_api_request_json(),
@@ -222,7 +222,7 @@ class AccountModule(BaseModule):
         )
 
         return await send_post_request(
-            await self.get_session(),
+            await self.get_client(),
             url,
             EmptyModel,
             json=request_model.to_api_request_json(),
@@ -244,7 +244,7 @@ class AccountModule(BaseModule):
 
         payload = request_model.to_api_request_json()
         return await send_post_request(
-            await self.get_session(),
+            await self.get_client(),
             url,
             int,
             json=payload,
@@ -278,7 +278,7 @@ class AccountModule(BaseModule):
             },
         )
         return await send_get_request(
-            await self.get_session(),
+            await self.get_client(),
             url,
             List[AssetOperationModel],
             api_key=self._get_api_key(),

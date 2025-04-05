@@ -10,4 +10,4 @@ class _SettingsModel(X10BaseModel):
 class InfoModule(BaseModule):
     async def get_settings(self):
         url = self._get_url("/info/settings")
-        return await send_get_request(await self.get_session(), url, _SettingsModel)
+        return await send_get_request(await self.get_client(), url, _SettingsModel)
