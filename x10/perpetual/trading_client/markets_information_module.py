@@ -68,7 +68,7 @@ class MarketsInformationModule(BaseModule):
             },
         )
         return await send_get_request(
-            await self.get_session(), url, List[FundingRateModel]
+            await self.get_client(), url, List[FundingRateModel]
         )
 
     async def get_orderbook_snapshot(self, *, market_name: str):

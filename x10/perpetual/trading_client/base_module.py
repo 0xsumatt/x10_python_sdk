@@ -51,7 +51,7 @@ class BaseModule:
 
     async def get_client(self) -> HTTPClient:
         if self.__client is None:
-            created_client = self.HTTPClient()
+            created_client = HTTPClient()
             self.__client = created_client
 
         return self.__client
