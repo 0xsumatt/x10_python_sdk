@@ -5,6 +5,7 @@ from x10.errors import X10Error
 from x10.perpetual.accounts import StarkPerpetualAccount
 from x10.perpetual.configuration import EndpointConfig
 from x10.utils.http import CLIENT_TIMEOUT, get_url
+from aiosonic.timeout import Timeouts
 
 
 class BaseModule:
@@ -50,7 +51,8 @@ class BaseModule:
 
     async def get_client(self) -> HTTPClient:
         if self.__client is None:
-            created_client = HTTPClient(request_timeout=CLIENT_TIMEOUT)
+            timeouts= Timeouts(request_timeout=CLIENT_TIMEOUT)
+            created_client = HTTPClient.get(timeouts=timeouts)
             self.__client = created_client
 
         return self.__client
