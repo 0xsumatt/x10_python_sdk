@@ -50,7 +50,7 @@ class BaseModule:
 
     async def get_client(self) -> HTTPClient:
         if self.__client is None:
-            created_client = HTTPClient(timeout=CLIENT_TIMEOUT)
+            created_client = HTTPClient(request_timeout=CLIENT_TIMEOUT)
             self.__client = created_client
 
         return self.__client
