@@ -198,7 +198,7 @@ async def send_patch_request(
     response = await client.patch(url, json=json, headers=headers)
     response_text = await response.text()
     if response_text == "":
-        LOGGER.error("Empty HTTP %s response from PATCH %s", response.status, url)
+        LOGGER.error("Empty HTTP %s response from PATCH %s", response.status_code, url)
         response_text = '{"status": "OK"}'
     handle_known_errors(url, response_code_to_exception, response, response_text)
     return parse_response_to_model(response_text, model_class)
@@ -226,23 +226,23 @@ def handle_known_errors(
     response: HttpResponse,
     response_text: str,
 ):
-    if response.status == 401:
+    if response.status_code == 401:
         LOGGER.error("Unauthorized response from POST %s: %s", url, response_text)
         raise NotAuthorizedException(
             f"Unauthorized response from POST {url}: {response_text}"
         )
 
-    if response.status == 429:
+    if response.status_code== 429:
         LOGGER.error("Rate limited response from POST %s: %s", url, response_text)
         raise RateLimitException(f"Rate limited response from POST {url}: {response}")
 
-    if response_code_handler and response.status in response_code_handler:
-        raise response_code_handler[response.status](response_text)
+    if response_code_handler and response.status_code in response_code_handler:
+        raise response_code_handler[response.status_code](response_text)
 
-    if response.status > 299:
+    if response.status_code > 299:
         LOGGER.error("Error response from POST %s: %s", url, response_text)
         raise ValueError(
-            f"Error response from POST {url}: code {response.status} - {response_text}"
+            f"Error response from POST {url}: code {response.status_code} - {response_text}"
         )
 
 
