@@ -1,3 +1,4 @@
+import math
 from datetime import datetime, timezone
 
 
@@ -8,4 +9,5 @@ def utc_now():
 def to_epoch_millis(value: datetime):
     assert value.tzinfo == timezone.utc, "`value` must be in UTC"
 
-    return int(value.timestamp() * 1000)
+    # Use ceiling to match the hash_order logic which uses math.ceil
+    return int(math.ceil(value.timestamp() * 1000))

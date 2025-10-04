@@ -8,7 +8,6 @@ from x10.perpetual.assets import (
     AssetOperationType,
 )
 from x10.perpetual.balances import BalanceModel
-from x10.perpetual.contract import call_stark_perpetual_deposit
 from x10.perpetual.fees import TradingFeeModel
 from x10.perpetual.orders import OpenOrderModel, OrderSide, OrderType
 from x10.perpetual.positions import PositionHistoryModel, PositionModel, PositionSide
@@ -156,13 +155,12 @@ class AccountModule(BaseModule):
         )
 
     async def get_fees(
-        self, *, market_names: List[str]
-    ) -> WrappedApiResponse[List[TradingFeeModel]]:
+        self, *, market_names: List[str],builder_id: Optional[int] = None)-> WrappedApiResponse[List[TradingFeeModel]]:
         """
         https://api.docs.extended.exchange/#get-fees
         """
 
-        url = self._get_url("/user/fees", query={"market": market_names})
+        url = self._get_url("/user/fees", query={"market": market_names,"builderId":builder_id})
         return await send_get_request(
             await self.get_client(),
             url,
@@ -207,6 +205,7 @@ class AccountModule(BaseModule):
         to_vault: int,
         to_l2_key: str,
         amount: Decimal,
+        nonce:int| None = None,
     ) -> WrappedApiResponse[EmptyModel]:
         from_vault = self._get_stark_account().vault
         from_l2_key = self._get_stark_account().public_key
@@ -219,6 +218,7 @@ class AccountModule(BaseModule):
             amount=amount,
             config=self._get_endpoint_config(),
             stark_account=self._get_stark_account(),
+            nonce=nonce,
         )
 
         return await send_post_request(
@@ -284,18 +284,4 @@ class AccountModule(BaseModule):
             api_key=self._get_api_key(),
         )
 
-    async def deposit(
-        self, amount: Decimal, get_eth_private_key: Callable[[], str]
-    ) -> str:
-        stark_account = self.__stark_account
-
-        if not stark_account:
-            raise ValueError("Stark account is not set")
-
-        return call_stark_perpetual_deposit(
-            l2_vault=stark_account.vault,
-            l2_key=stark_account.public_key,
-            config=self._get_endpoint_config(),
-            human_readable_amount=amount,
-            get_eth_private_key=get_eth_private_key,
-        )
+    

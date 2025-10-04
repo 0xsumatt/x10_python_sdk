@@ -44,10 +44,13 @@ class PerpetualTradingClient:
         price: Decimal,
         side: OrderSide,
         post_only: bool = False,
-        previous_order_id=None,
+        previous_order_id: Optional[str] = None,
         expire_time: Optional[datetime] = None,
         time_in_force: TimeInForce = TimeInForce.GTT,
         self_trade_protection_level: SelfTradeProtectionLevel = SelfTradeProtectionLevel.ACCOUNT,
+        external_id: Optional[str] = None,
+        builder_fee: Optional[Decimal] = None,
+        builder_id: Optional[int] = None
     ) -> WrappedApiResponse[PlacedOrderModel]:
         if not self.__stark_account:
             raise ValueError("Stark account is not set")
@@ -61,16 +64,20 @@ class PerpetualTradingClient:
             raise ValueError(f"Market {market_name} not found")
 
         order = create_order_object(
-            self.__stark_account,
-            market,
-            amount_of_synthetic,
-            price,
-            side,
-            post_only,
-            previous_order_id,
-            expire_time,
+            account=self.__stark_account,
+            market=market,
+            amount_of_synthetic=amount_of_synthetic,
+            price=price,
+            side=side,
+            starknet_domain=self.__endpoint_config.starknet_domain,
+            post_only=post_only,
+            previous_order_external_id=previous_order_id,
+            expire_time=expire_time,
+            order_external_id=external_id,
             time_in_force=time_in_force,
             self_trade_protection_level=self_trade_protection_level,
+            builder_fee=builder_fee,
+            builder_id=builder_id,
         )
 
         return await self.__order_management_module.place_order(order)
@@ -88,6 +95,7 @@ class PerpetualTradingClient:
         api_key = stark_account.api_key if stark_account else None
 
         self.__markets = None
+        self.__endpoint_config = endpoint_config
 
         if stark_account:
             self.__stark_account = stark_account

@@ -1,5 +1,11 @@
 from dataclasses import dataclass
 
+@dataclass
+class StarknetDomain:
+    name:str
+    version:str
+    chain_id:str
+    revision:str
 
 @dataclass
 class EndpointConfig:
@@ -12,18 +18,22 @@ class EndpointConfig:
     asset_operations_contract: str
     collateral_asset_on_chain_id: str
     collateral_decimals: int
+    collateral_asset_id: str
+    starknet_domain: StarknetDomain
 
 
 TESTNET_CONFIG = EndpointConfig(
     chain_rpc_url="https://rpc.sepolia.org",
-    api_base_url="https://api.testnet.extended.exchange/api/v1",
-    stream_url="wss://api.testnet.extended.exchange/stream.extended.exchange/v1",
-    onboarding_url="https://api.testnet.extended.exchange",
-    signing_domain="testnet.extended.exchange",
-    collateral_asset_contract="0x0C9165046063B7bCD05C6924Bbe05ed535c140a1",
-    asset_operations_contract="0xe42bb60Fab4EA4905832AEbDf0f001c784dA271b",
-    collateral_asset_on_chain_id="0x31857064564ed0ff978e687456963cba09c2c6985d8f9300a1de4962fafa054",
+    api_base_url="https://api.starknet.sepolia.extended.exchange/api/v1",
+    stream_url="wss://starknet.sepolia.extended.exchange/stream.extended.exchange/v1",
+    onboarding_url="https://api.starknet.sepolia.extended.exchange",
+    signing_domain="starknet.sepolia.extended.exchange",
+    collateral_asset_contract="",
+    asset_operations_contract="",
+    collateral_asset_on_chain_id="",
     collateral_decimals=6,
+    starknet_domain=StarknetDomain(name="Perpetuals", version="v0", chain_id="SN_SEPOLIA", revision="1"),
+    collateral_asset_id="0x1",
 )
 
 MAINNET_CONFIG = EndpointConfig(
@@ -36,6 +46,8 @@ MAINNET_CONFIG = EndpointConfig(
     asset_operations_contract="0x1cE5D7f52A8aBd23551e91248151CA5A13353C65",
     collateral_asset_on_chain_id="0x2893294412a4c8f915f75892b395ebbf6859ec246ec365c3b1f56f47c3a0a5d",
     collateral_decimals=6,
+    collateral_asset_id="0x1",
+    starknet_domain=StarknetDomain(name="Perpetuals", version="v0", chain_id="SN_MAINNET", revision="1"),
 )
 
 """
@@ -52,4 +64,35 @@ MAINNET_CONFIG_LEGACY_SIGNING_DOMAIN = EndpointConfig(
     asset_operations_contract="0x1cE5D7f52A8aBd23551e91248151CA5A13353C65",
     collateral_asset_on_chain_id="0x2893294412a4c8f915f75892b395ebbf6859ec246ec365c3b1f56f47c3a0a5d",
     collateral_decimals=6,
+    collateral_asset_id="0x1",
+    starknet_domain=StarknetDomain(name="Perpetuals", version="v0", chain_id="SN_MAINNET", revision="1"),
+)
+
+STARKNET_TESTNET_CONFIG = EndpointConfig(
+    chain_rpc_url="https://rpc.sepolia.org",
+    api_base_url="https://api.starknet.sepolia.extended.exchange/api/v1",
+    stream_url="wss://starknet.sepolia.extended.exchange/stream.extended.exchange/v1",
+    onboarding_url="https://api.starknet.sepolia.extended.exchange",
+    signing_domain="starknet.sepolia.extended.exchange",
+    collateral_asset_contract="",
+    asset_operations_contract="",
+    collateral_asset_on_chain_id="",
+    collateral_decimals=6,
+    starknet_domain=StarknetDomain(name="Perpetuals", version="v0", chain_id="SN_SEPOLIA", revision="1"),
+    collateral_asset_id="0x1",
+)
+
+
+STARKNET_MAINNET_CONFIG = EndpointConfig(
+    chain_rpc_url="",
+    api_base_url="https://api.starknet.extended.exchange/api/v1",
+    stream_url="wss://api.starknet.extended.exchange/stream.extended.exchange/v1",
+    onboarding_url="https://api.starknet.extended.exchange",
+    signing_domain="extended.exchange",
+    collateral_asset_contract="",
+    asset_operations_contract="",
+    collateral_asset_on_chain_id="0x1",
+    collateral_decimals=6,
+    starknet_domain=StarknetDomain(name="Perpetuals", version="v0", chain_id="SN_MAIN", revision="1"),
+    collateral_asset_id="0x1",
 )
