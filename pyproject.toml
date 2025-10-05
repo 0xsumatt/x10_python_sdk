@@ -23,7 +23,7 @@ dependencies = [
     "eth-account==0.11.2",
     "eth_typing==4.4.0",
     "mpmath==1.3.0",
-    "fast-stark-crypto==0.1.0",
+    "fast-stark-crypto==0.3.7",
     "numpy==1.26.2",
     "picows",
     "pyhamcrest>=2.1.0",
