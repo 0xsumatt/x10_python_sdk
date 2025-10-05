@@ -155,12 +155,15 @@ class AccountModule(BaseModule):
         )
 
     async def get_fees(
-        self, *, market_names: List[str],builder_id: Optional[int] = None)-> WrappedApiResponse[List[TradingFeeModel]]:
+        self, *, market_names: List[str], builder_id: Optional[int] = None
+    ) -> WrappedApiResponse[List[TradingFeeModel]]:
         """
         https://api.docs.extended.exchange/#get-fees
         """
 
-        url = self._get_url("/user/fees", query={"market": market_names,"builderId":builder_id})
+        url = self._get_url(
+            "/user/fees", query={"market": market_names, "builderId": builder_id}
+        )
         return await send_get_request(
             await self.get_client(),
             url,
@@ -205,7 +208,7 @@ class AccountModule(BaseModule):
         to_vault: int,
         to_l2_key: str,
         amount: Decimal,
-        nonce:int| None = None,
+        nonce: int | None = None,
     ) -> WrappedApiResponse[EmptyModel]:
         from_vault = self._get_stark_account().vault
         from_l2_key = self._get_stark_account().public_key
@@ -283,5 +286,3 @@ class AccountModule(BaseModule):
             List[AssetOperationModel],
             api_key=self._get_api_key(),
         )
-
-    

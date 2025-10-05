@@ -50,7 +50,7 @@ class PerpetualTradingClient:
         self_trade_protection_level: SelfTradeProtectionLevel = SelfTradeProtectionLevel.ACCOUNT,
         external_id: Optional[str] = None,
         builder_fee: Optional[Decimal] = None,
-        builder_id: Optional[int] = None
+        builder_id: Optional[int] = None,
     ) -> WrappedApiResponse[PlacedOrderModel]:
         if not self.__stark_account:
             raise ValueError("Stark account is not set")

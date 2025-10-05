@@ -11,7 +11,8 @@ from x10.perpetual.transfers import (
 )
 from x10.utils.date import utc_now
 from x10.utils.model import SettlementSignatureModel
-from x10.utils.starkex import generate_nonce, get_transfer_msg
+from x10.utils import generate_nonce
+from fast_stark_crypto import get_transfer_msg_hash
 
 SECONDS_IN_HOUR = 60 * 60
 ASSET_ID_FEE = 0
@@ -46,7 +47,7 @@ def create_transfer_object(
     stark_amount = scaled_amount.to_integral_exact()
 
     nonce = generate_nonce()
-    transfer_hash = get_transfer_msg(
+    transfer_hash = get_transfer_msg_hash(
         asset_id=int(config.collateral_asset_on_chain_id, base=16),
         asset_id_fee=ASSET_ID_FEE,
         sender_position_id=from_vault,

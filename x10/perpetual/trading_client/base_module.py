@@ -55,4 +55,3 @@ class BaseModule:
             self.__client = created_client
 
         return self.__client
-

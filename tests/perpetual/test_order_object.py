@@ -16,7 +16,7 @@ FROZEN_NONCE = 1473459052
 async def test_create_sell_order_with_default_expiration(
     mocker: MockerFixture, create_trading_account, create_btc_usd_market
 ):
-    mocker.patch("x10.utils.starkex.generate_nonce", return_value=FROZEN_NONCE)
+    mocker.patch("x10.utils.generate_nonce", return_value=FROZEN_NONCE)
 
     freezer = freeze_time("2024-01-05 01:08:56.860694")
     frozen_time = freezer.start()
@@ -67,15 +67,11 @@ async def test_create_sell_order_with_default_expiration(
                 "tpSlType": None,
                 "takeProfit": None,
                 "stopLoss": None,
-<<<<<<< HEAD
-                "debuggingAmounts": {"collateralAmount": "43445116", "feeAmount": "21723", "syntheticAmount": "1000"},
-=======
                 "debuggingAmounts": {
                     "collateralAmount": "43445116",
                     "feeAmount": "21723",
                     "syntheticAmount": "1000",
                 },
->>>>>>> change-to-ruff
             }
         ),
     )
@@ -83,13 +79,9 @@ async def test_create_sell_order_with_default_expiration(
 
 @freeze_time("2024-01-05 01:08:56.860694")
 @pytest.mark.asyncio
-<<<<<<< HEAD
-async def test_create_sell_order(mocker: MockerFixture, create_trading_account, create_btc_usd_market):
-=======
 async def test_create_sell_order(
     mocker: MockerFixture, create_trading_account, create_btc_usd_market
 ):
->>>>>>> change-to-ruff
     mocker.patch("x10.utils.starkex.generate_nonce", return_value=FROZEN_NONCE)
 
     from x10.perpetual.order_object import create_order_object
@@ -135,15 +127,11 @@ async def test_create_sell_order(
                 "tpSlType": None,
                 "takeProfit": None,
                 "stopLoss": None,
-<<<<<<< HEAD
-                "debuggingAmounts": {"collateralAmount": "43445116", "feeAmount": "21723", "syntheticAmount": "1000"},
-=======
                 "debuggingAmounts": {
                     "collateralAmount": "43445116",
                     "feeAmount": "21723",
                     "syntheticAmount": "1000",
                 },
->>>>>>> change-to-ruff
             }
         ),
     )
@@ -151,13 +139,9 @@ async def test_create_sell_order(
 
 @freeze_time("2024-01-05 01:08:56.860694")
 @pytest.mark.asyncio
-<<<<<<< HEAD
-async def test_create_buy_order(mocker: MockerFixture, create_trading_account, create_btc_usd_market):
-=======
 async def test_create_buy_order(
     mocker: MockerFixture, create_trading_account, create_btc_usd_market
 ):
->>>>>>> change-to-ruff
     mocker.patch("x10.utils.starkex.generate_nonce", return_value=FROZEN_NONCE)
 
     from x10.perpetual.order_object import create_order_object
@@ -204,15 +188,11 @@ async def test_create_buy_order(
                 "tpSlType": None,
                 "takeProfit": None,
                 "stopLoss": None,
-<<<<<<< HEAD
-                "debuggingAmounts": {"collateralAmount": "43445117", "feeAmount": "21723", "syntheticAmount": "1000"},
-=======
                 "debuggingAmounts": {
                     "collateralAmount": "43445117",
                     "feeAmount": "21723",
                     "syntheticAmount": "1000",
                 },
->>>>>>> change-to-ruff
             }
         ),
     )
@@ -220,13 +200,9 @@ async def test_create_buy_order(
 
 @freeze_time("2024-01-05 01:08:56.860694")
 @pytest.mark.asyncio
-<<<<<<< HEAD
-async def test_cancel_previous_order(mocker: MockerFixture, create_trading_account, create_btc_usd_market):
-=======
 async def test_cancel_previous_order(
     mocker: MockerFixture, create_trading_account, create_btc_usd_market
 ):
->>>>>>> change-to-ruff
     mocker.patch("x10.utils.starkex.generate_nonce", return_value=FROZEN_NONCE)
 
     from x10.perpetual.order_object import create_order_object
@@ -255,13 +231,9 @@ async def test_cancel_previous_order(
 
 @freeze_time("2024-01-05 01:08:56.860694")
 @pytest.mark.asyncio
-<<<<<<< HEAD
-async def test_external_order_id(mocker: MockerFixture, create_trading_account, create_btc_usd_market):
-=======
 async def test_external_order_id(
     mocker: MockerFixture, create_trading_account, create_btc_usd_market
 ):
->>>>>>> change-to-ruff
     mocker.patch("x10.utils.starkex.generate_nonce", return_value=FROZEN_NONCE)
 
     from x10.perpetual.order_object import create_order_object

@@ -42,7 +42,9 @@ class AccountRegistration:
     host: str
 
     def __post_init__(self):
-        self.time_string = self.time.astimezone(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+        self.time_string = self.time.astimezone(timezone.utc).strftime(
+            "%Y-%m-%dT%H:%M:%SZ"
+        )
 
     def to_signable_message(self, signing_domain) -> SignableMessage:
         domain = {"name": signing_domain}
@@ -143,7 +145,9 @@ def get_registration_struct_to_sign(
     )
 
 
-def get_key_derivation_struct_to_sign(account_index: int, address: str, signing_domain: str) -> SignableMessage:
+def get_key_derivation_struct_to_sign(
+    account_index: int, address: str, signing_domain: str
+) -> SignableMessage:
     primary_type = "AccountCreation"
     domain = {"name": signing_domain}
     message = {
@@ -170,7 +174,9 @@ def get_key_derivation_struct_to_sign(account_index: int, address: str, signing_
     return encode_typed_data(full_message=structured_data)
 
 
-def get_l2_keys_from_l1_account(l1_account: LocalAccount, account_index: int, signing_domain: str) -> StarkKeyPair:
+def get_l2_keys_from_l1_account(
+    l1_account: LocalAccount, account_index: int, signing_domain: str
+) -> StarkKeyPair:
     struct = get_key_derivation_struct_to_sign(
         account_index=account_index,
         address=l1_account.address,
@@ -193,7 +199,11 @@ def get_onboarding_payload(
         time = datetime.now(timezone.utc)
 
     registration_payload = get_registration_struct_to_sign(
-        account_index=0, address=account.address, timestamp=time, action=register_action, host=host
+        account_index=0,
+        address=account.address,
+        timestamp=time,
+        action=register_action,
+        host=host,
     )
     payload = registration_payload.to_signable_message(signing_domain=signing_domain)
     l1_signature = account.sign_message(payload).signature.hex()
@@ -224,7 +234,11 @@ def get_sub_account_creation_payload(
         time = datetime.now(timezone.utc)
 
     registration_payload = get_registration_struct_to_sign(
-        account_index=account_index, address=l1_address, timestamp=time, action=sub_account_action, host=host
+        account_index=account_index,
+        address=l1_address,
+        timestamp=time,
+        action=sub_account_action,
+        host=host,
     )
 
     l2_message = pedersen_hash(int(l1_address, 16), key_pair.public)

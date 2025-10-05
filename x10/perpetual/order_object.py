@@ -93,14 +93,14 @@ def __create_order_object(
     starknet_domain: StarknetDomain = None,
     nonce: Optional[int] = None,
     builder_fee: Optional[Decimal] = None,
-    builder_id: Optional[int] = None
+    builder_id: Optional[int] = None,
 ) -> PerpetualOrderModel:
     if exact_only:
         raise NotImplementedError("`exact_only` option is not supported yet")
 
     if expire_time is None:
         raise ValueError("expected expire time, it must be provided")
-    
+
     if nonce is None:
         nonce = generate_nonce()
     is_buying_synthetic = side == OrderSide.BUY
@@ -117,27 +117,29 @@ def __create_order_object(
 
     total_fee = fees.taker_fee_rate + (builder_fee if builder_fee is not None else 0)
 
-    fee_amount_human = HumanReadableAmount(total_fee * collateral_amount_human.value, market.collateral_asset)
+    fee_amount_human = HumanReadableAmount(
+        total_fee * collateral_amount_human.value, market.collateral_asset
+    )
     fee_rate = fees.taker_fee_rate
-    stark_collateral_amount: StarkAmount = collateral_amount_human.to_stark_amount(rounding_context=rounding_context)
-    stark_synthetic_amount: StarkAmount = synthetic_amount_human.to_stark_amount(rounding_context=rounding_context)
-    stark_fee_amount: StarkAmount = fee_amount_human.to_stark_amount(rounding_context=ROUNDING_FEE_CONTEXT)
+    stark_collateral_amount: StarkAmount = collateral_amount_human.to_stark_amount(
+        rounding_context=rounding_context
+    )
+    stark_synthetic_amount: StarkAmount = synthetic_amount_human.to_stark_amount(
+        rounding_context=rounding_context
+    )
+    stark_fee_amount: StarkAmount = fee_amount_human.to_stark_amount(
+        rounding_context=ROUNDING_FEE_CONTEXT
+    )
 
     if is_buying_synthetic:
         stark_collateral_amount = stark_collateral_amount.negate()
     else:
         stark_synthetic_amount = stark_synthetic_amount.negate()
-    
+
     debugging_amounts = StarkDebuggingOrderAmountsModel(
-        collateral_amount=Decimal(
-            stark_collateral_amount.value
-        ),
-        fee_amount=Decimal(
-            stark_fee_amount.value
-        ),
-        synthetic_amount=Decimal(
-            stark_synthetic_amount.value
-        ),
+        collateral_amount=Decimal(stark_collateral_amount.value),
+        fee_amount=Decimal(stark_fee_amount.value),
+        synthetic_amount=Decimal(stark_synthetic_amount.value),
     )
 
     order_hash = hash_order(
@@ -148,9 +150,8 @@ def __create_order_object(
         position_id=collateral_position_id,
         expiration_timestamp=expire_time,
         public_key=public_key,
-        starknet_domain=starknet_domain
+        starknet_domain=starknet_domain,
     )
-    
 
     (order_signature_r, order_signature_s) = signer(order_hash)
     settlement = StarkSettlementModel(
@@ -181,6 +182,7 @@ def __create_order_object(
     )
 
     return order
+
 
 def hash_order(
     amount_synthetic: StarkAmount,

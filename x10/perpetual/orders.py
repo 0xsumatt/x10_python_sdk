@@ -154,6 +154,7 @@ class PerpetualOrderModel(X10BaseModel):
     builderFee: Optional[Decimal] = None
     builderId: Optional[int] = None
 
+
 class PlacedOrderModel(X10BaseModel):
     id: int
     external_id: str

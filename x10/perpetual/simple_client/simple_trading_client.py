@@ -81,10 +81,16 @@ class BlockingTradingClient:
             )
         self.__endpoint_config = endpoint_config
         self.__account = account
-        self.__market_module = MarketsInformationModule(endpoint_config, api_key=account.api_key)
-        self.__orders_module = OrderManagementModule(endpoint_config, api_key=account.api_key)
+        self.__market_module = MarketsInformationModule(
+            endpoint_config, api_key=account.api_key
+        )
+        self.__orders_module = OrderManagementModule(
+            endpoint_config, api_key=account.api_key
+        )
         self.__markets: Union[None, Dict[str, MarketModel]] = None
-        self.__stream_client: PerpetualStreamClient = PerpetualStreamClient(api_url=endpoint_config.stream_url)
+        self.__stream_client: PerpetualStreamClient = PerpetualStreamClient(
+            api_url=endpoint_config.stream_url
+        )
         self.__account_stream: Union[
             None,
             PerpetualStreamConnection[WrappedStreamResponse[AccountStreamDataModel]],
@@ -94,7 +100,9 @@ class BlockingTradingClient:
         self.__stream_task = asyncio.create_task(self.___order_stream())
 
     @staticmethod
-    async def create(endpoint_config: EndpointConfig, account: StarkPerpetualAccount) -> "BlockingTradingClient":
+    async def create(
+        endpoint_config: EndpointConfig, account: StarkPerpetualAccount
+    ) -> "BlockingTradingClient":
         client = BlockingTradingClient(endpoint_config, account)
         await client.__stream_client.subscribe_to_account_updates(account.api_key)
         return client
@@ -133,7 +141,9 @@ class BlockingTradingClient:
             await self.__handle_update(order)
 
     async def ___order_stream(self):
-        self.__account_stream = await self.__stream_client.subscribe_to_account_updates(self.__account.api_key)
+        self.__account_stream = await self.__stream_client.subscribe_to_account_updates(
+            self.__account.api_key
+        )
         async for event in self.__account_stream:
             if not (event.data and event.data.orders):
                 continue
@@ -145,15 +155,24 @@ class BlockingTradingClient:
     async def cancel_order(self, order_external_id: str) -> TimedCancel:
         awaitable: Awaitable
         if order_external_id in self.__cancel_waiters:
-            awaitable = condition_to_awaitable(self.__cancel_waiters[order_external_id].condition)
+            awaitable = condition_to_awaitable(
+                self.__cancel_waiters[order_external_id].condition
+            )
         else:
             self.__cancel_waiters[order_external_id] = CancelWaiter(
                 asyncio.Condition(), start_nanos=time.time_ns(), end_nanos=None
             )
-            cancel_task = asyncio.create_task(self.__orders_module.cancel_order_by_external_id(order_external_id))
+            cancel_task = asyncio.create_task(
+                self.__orders_module.cancel_order_by_external_id(order_external_id)
+            )
             awaitable = asyncio.gather(
                 cancel_task,
-                asyncio.wait_for(condition_to_awaitable(self.__cancel_waiters[order_external_id].condition), 5),
+                asyncio.wait_for(
+                    condition_to_awaitable(
+                        self.__cancel_waiters[order_external_id].condition
+                    ),
+                    5,
+                ),
                 return_exceptions=False,
             )
 
@@ -177,7 +196,9 @@ class BlockingTradingClient:
             markets = await self.__market_module.get_markets()
             market_data = markets.data
             if not market_data:
-                raise ValueError("Core market data is empty, check your connection or API key.")
+                raise ValueError(
+                    "Core market data is empty, check your connection or API key."
+                )
             self.__markets = {m.name: m for m in market_data}
         return self.__markets
 
@@ -222,13 +243,15 @@ class BlockingTradingClient:
             starknet_domain=self.__endpoint_config.starknet_domain,
             order_external_id=external_id,
             builder_fee=builder_fee,
-            builder_id=builder_id
+            builder_id=builder_id,
         )
 
         if order.id in self.__order_waiters:
             raise ValueError(f"order with {order.id} hash already placed")
 
-        self.__order_waiters[order.id] = OrderWaiter(asyncio.Condition(), None, start_nanos=time.time_ns())
+        self.__order_waiters[order.id] = OrderWaiter(
+            asyncio.Condition(), None, start_nanos=time.time_ns()
+        )
         placed_order_task = asyncio.create_task(self.__orders_module.place_order(order))
         order_waiter = self.__order_waiters[order.id]
         if order_waiter.open_order:

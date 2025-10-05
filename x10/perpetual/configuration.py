@@ -1,11 +1,13 @@
 from dataclasses import dataclass
 
+
 @dataclass
 class StarknetDomain:
-    name:str
-    version:str
-    chain_id:str
-    revision:str
+    name: str
+    version: str
+    chain_id: str
+    revision: str
+
 
 @dataclass
 class EndpointConfig:
@@ -32,7 +34,9 @@ TESTNET_CONFIG = EndpointConfig(
     asset_operations_contract="",
     collateral_asset_on_chain_id="",
     collateral_decimals=6,
-    starknet_domain=StarknetDomain(name="Perpetuals", version="v0", chain_id="SN_SEPOLIA", revision="1"),
+    starknet_domain=StarknetDomain(
+        name="Perpetuals", version="v0", chain_id="SN_SEPOLIA", revision="1"
+    ),
     collateral_asset_id="0x1",
 )
 
@@ -47,7 +51,9 @@ MAINNET_CONFIG = EndpointConfig(
     collateral_asset_on_chain_id="0x2893294412a4c8f915f75892b395ebbf6859ec246ec365c3b1f56f47c3a0a5d",
     collateral_decimals=6,
     collateral_asset_id="0x1",
-    starknet_domain=StarknetDomain(name="Perpetuals", version="v0", chain_id="SN_MAINNET", revision="1"),
+    starknet_domain=StarknetDomain(
+        name="Perpetuals", version="v0", chain_id="SN_MAINNET", revision="1"
+    ),
 )
 
 """
@@ -65,7 +71,9 @@ MAINNET_CONFIG_LEGACY_SIGNING_DOMAIN = EndpointConfig(
     collateral_asset_on_chain_id="0x2893294412a4c8f915f75892b395ebbf6859ec246ec365c3b1f56f47c3a0a5d",
     collateral_decimals=6,
     collateral_asset_id="0x1",
-    starknet_domain=StarknetDomain(name="Perpetuals", version="v0", chain_id="SN_MAINNET", revision="1"),
+    starknet_domain=StarknetDomain(
+        name="Perpetuals", version="v0", chain_id="SN_MAINNET", revision="1"
+    ),
 )
 
 STARKNET_TESTNET_CONFIG = EndpointConfig(
@@ -78,7 +86,9 @@ STARKNET_TESTNET_CONFIG = EndpointConfig(
     asset_operations_contract="",
     collateral_asset_on_chain_id="",
     collateral_decimals=6,
-    starknet_domain=StarknetDomain(name="Perpetuals", version="v0", chain_id="SN_SEPOLIA", revision="1"),
+    starknet_domain=StarknetDomain(
+        name="Perpetuals", version="v0", chain_id="SN_SEPOLIA", revision="1"
+    ),
     collateral_asset_id="0x1",
 )
 
@@ -93,6 +103,8 @@ STARKNET_MAINNET_CONFIG = EndpointConfig(
     asset_operations_contract="",
     collateral_asset_on_chain_id="0x1",
     collateral_decimals=6,
-    starknet_domain=StarknetDomain(name="Perpetuals", version="v0", chain_id="SN_MAIN", revision="1"),
+    starknet_domain=StarknetDomain(
+        name="Perpetuals", version="v0", chain_id="SN_MAIN", revision="1"
+    ),
     collateral_asset_id="0x1",
 )

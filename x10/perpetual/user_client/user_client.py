@@ -55,7 +55,9 @@ class UserClient:
         self.__endpoint_config = endpoint_config
         self.__l1_private_key = l1_private_key
 
-    def _get_url(self, base_url: str, path: str, *, query: Optional[Dict] = None, **path_params) -> str:
+    def _get_url(
+        self, base_url: str, path: str, *, query: Optional[Dict] = None, **path_params
+    ) -> str:
         return get_url(f"{base_url}{path}", query=query, **path_params)
 
     async def get_session(self) -> aiohttp.ClientSession:
@@ -73,7 +75,9 @@ class UserClient:
     async def onboard(self, referral_code: Optional[str] = None):
         signing_account: LocalAccount = Account.from_key(self.__l1_private_key())
         key_pair = get_l2_keys_from_l1_account(
-            l1_account=signing_account, account_index=0, signing_domain=self.__endpoint_config.signing_domain
+            l1_account=signing_account,
+            account_index=0,
+            signing_domain=self.__endpoint_config.signing_domain,
         )
         payload = get_onboarding_payload(
             signing_account,
@@ -90,9 +94,13 @@ class UserClient:
         if onboarded_client is None:
             raise ValueError("No account data returned from onboarding")
 
-        return OnBoardedAccount(account=onboarded_client.default_account, l2_key_pair=key_pair)
+        return OnBoardedAccount(
+            account=onboarded_client.default_account, l2_key_pair=key_pair
+        )
 
-    async def onboard_subaccount(self, account_index: int, description: str | None = None):
+    async def onboard_subaccount(
+        self, account_index: int, description: str | None = None
+    ):
         request_path = "/auth/onboard/subaccount"
         if description is None:
             description = f"Subaccount {account_index}"
@@ -133,10 +141,14 @@ class UserClient:
         except SubAccountExists:
             client_accounts = await self.get_accounts()
             account_with_index = [
-                account for account in client_accounts if account.account.account_index == account_index
+                account
+                for account in client_accounts
+                if account.account.account_index == account_index
             ]
             if not account_with_index:
-                raise SubAccountExists("Subaccount already exists but not found in client accounts")
+                raise SubAccountExists(
+                    "Subaccount already exists but not found in client accounts"
+                )
             onboarded_account = account_with_index[0].account
         if onboarded_account is None:
             raise ValueError("No account data returned from onboarding")
@@ -155,7 +167,9 @@ class UserClient:
             L1_MESSAGE_TIME_HEADER: auth_time_string,
         }
         url = self._get_url(self.__endpoint_config.onboarding_url, path=request_path)
-        response = await send_get_request(await self.get_session(), url, List[AccountModel], request_headers=headers)
+        response = await send_get_request(
+            await self.get_session(), url, List[AccountModel], request_headers=headers
+        )
         accounts = response.data or []
 
         return [
@@ -170,7 +184,9 @@ class UserClient:
             for account in accounts
         ]
 
-    async def create_account_api_key(self, account: AccountModel, description: str | None) -> str:
+    async def create_account_api_key(
+        self, account: AccountModel, description: str | None
+    ) -> str:
         request_path = "/api/v1/user/account/api-key"
         if description is None:
             description = "trading api key for account {}".format(account.id)
@@ -199,5 +215,3 @@ class UserClient:
         if response_data is None:
             raise ValueError("No API key data returned from onboarding")
         return response_data.key
-
-    

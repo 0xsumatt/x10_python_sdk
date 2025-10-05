@@ -16,7 +16,9 @@ from x10.utils.model import X10BaseModel
 LOGGER = get_logger(__name__)
 CLIENT_TIMEOUT = ClientTimeout(total=DEFAULT_REQUEST_TIMEOUT_SECONDS)
 
-ApiResponseType = TypeVar("ApiResponseType", bound=Union[int, X10BaseModel, Sequence[X10BaseModel]])
+ApiResponseType = TypeVar(
+    "ApiResponseType", bound=Union[int, X10BaseModel, Sequence[X10BaseModel]]
+)
 
 
 class RateLimitException(X10Error):
@@ -72,8 +74,12 @@ class StreamDataType(Enum):
     WITHDRAWAL = "WITHDRAWAL"
 
     @classmethod
-    def __get_pydantic_core_schema__(cls, _source_type: Any, _handler: GetCoreSchemaHandler) -> CoreSchema:
-        return core_schema.no_info_plain_validator_function(lambda v: v if v in cls._value2member_map_ else cls.UNKNOWN)
+    def __get_pydantic_core_schema__(
+        cls, _source_type: Any, _handler: GetCoreSchemaHandler
+    ) -> CoreSchema:
+        return core_schema.no_info_plain_validator_function(
+            lambda v: v if v in cls._value2member_map_ else cls.UNKNOWN
+        )
 
 
 class WrappedStreamResponse(X10BaseModel, Generic[ApiResponseType]):
@@ -92,19 +98,29 @@ def parse_response_to_model(
     return WrappedApiResponse[model_class].model_validate_json(response_text)  # type: ignore[valid-type]
 
 
-def get_url(template: str, *, query: Optional[Dict[str, str | List[str]]] = None, **path_params):
+def get_url(
+    template: str, *, query: Optional[Dict[str, str | List[str]]] = None, **path_params
+):
     def replace_path_param(match: re.Match[str]):
         matched_value = match.group(1)
         is_param_optional = matched_value.endswith("?")
         param_key = matched_value[:-1] if is_param_optional else matched_value
-        param_value = path_params.get(param_key, "") if is_param_optional else path_params[param_key]
+        param_value = (
+            path_params.get(param_key, "")
+            if is_param_optional
+            else path_params[param_key]
+        )
 
         return str(param_value) if param_value is not None else ""
 
     def serialize_query_param(param_key: str, param_value: Union[str, List[str]]):
         if isinstance(param_value, list):
             return itertools.chain.from_iterable(
-                [serialize_query_param(param_key, item) for item in param_value if item is not None]
+                [
+                    serialize_query_param(param_key, item)
+                    for item in param_value
+                    if item is not None
+                ]
             )
         elif isinstance(param_value, Enum):
             return [f"{param_key}={param_value.value}"]
@@ -160,7 +176,9 @@ async def send_post_request(
         response_text = await response.text()
         handle_known_errors(url, response_code_to_exception, response, response_text)
         response_model = parse_response_to_model(response_text, model_class)
-        if (response_model.status != ResponseStatus.OK.value) or (response_model.error is not None):
+        if (response_model.status != ResponseStatus.OK.value) or (
+            response_model.error is not None
+        ):
             LOGGER.error("Error response from POST %s: %s", url, response_model.error)
             raise ValueError(f"Error response from POST {url}: {response_model.error}")
         return response_model
@@ -205,11 +223,16 @@ async def send_delete_request(
 
 
 def handle_known_errors(
-    url, response_code_handler: Optional[Dict[int, Type[Exception]]], response: ClientResponse, response_text: str
+    url,
+    response_code_handler: Optional[Dict[int, Type[Exception]]],
+    response: ClientResponse,
+    response_text: str,
 ):
     if response.status == 401:
         LOGGER.error("Unauthorized response from POST %s: %s", url, response_text)
-        raise NotAuthorizedException(f"Unauthorized response from POST {url}: {response_text}")
+        raise NotAuthorizedException(
+            f"Unauthorized response from POST {url}: {response_text}"
+        )
 
     if response.status == 429:
         LOGGER.error("Rate limited response from POST %s: %s", url, response_text)
@@ -220,10 +243,14 @@ def handle_known_errors(
 
     if response.status > 299:
         LOGGER.error("Error response from POST %s: %s", url, response_text)
-        raise ValueError(f"Error response from POST {url}: code {response.status} - {response_text}")
+        raise ValueError(
+            f"Error response from POST {url}: code {response.status} - {response_text}"
+        )
 
 
-def __get_headers(*, api_key: Optional[str] = None, request_headers: Optional[Dict[str, str]] = None) -> Dict[str, str]:
+def __get_headers(
+    *, api_key: Optional[str] = None, request_headers: Optional[Dict[str, str]] = None
+) -> Dict[str, str]:
     headers = {
         RequestHeader.ACCEPT.value: "application/json",
         RequestHeader.CONTENT_TYPE.value: "application/json",

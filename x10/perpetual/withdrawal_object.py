@@ -7,7 +7,8 @@ from x10.perpetual.configuration import EndpointConfig
 from x10.perpetual.withdrawals import PerpetualSlowWithdrawal, StarkWithdrawalSettlement
 from x10.utils.date import utc_now
 from x10.utils.model import SettlementSignatureModel
-from x10.utils.starkex import generate_nonce, get_withdrawal_to_address_msg
+from x10.utils import generate_nonce
+from fast_stark_crypto import get_withdrawal_msg_hash
 
 SECONDS_IN_HOUR = 60 * 60
 
@@ -33,7 +34,7 @@ def create_withdrawal_object(
     stark_amount = (amount.scaleb(config.collateral_decimals)).to_integral_exact()
 
     nonce = generate_nonce()
-    withdrawal_hash = get_withdrawal_to_address_msg(
+    withdrawal_hash = get_withdrawal_msg_hash(
         asset_id_collateral=int(config.collateral_asset_on_chain_id, base=16),
         position_id=stark_account.vault,
         eth_address=eth_address,

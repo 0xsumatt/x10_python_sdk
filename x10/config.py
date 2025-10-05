@@ -1,5 +1,3 @@
-
-
 TRADING_API_URL_DEV = "http://api.testnet.extended.exchange/api/v1"
 STREAM_API_URL_DEV = "wss://api.testnet.extended.exchange/stream.extended.exchange/v1"
 
