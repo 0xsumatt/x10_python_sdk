@@ -2,9 +2,9 @@ import itertools
 import re
 from enum import Enum
 from typing import Any, Dict, Generic, List, Optional, Sequence, Type, TypeVar, Union
+from aiosonic import HttpResponse, timeout, HTTPClient
+from aiosonic.timeout import Timeouts
 
-import aiohttp
-from aiohttp import ClientResponse, ClientTimeout
 from pydantic import GetCoreSchemaHandler
 from pydantic_core import CoreSchema, core_schema
 
@@ -14,7 +14,7 @@ from x10.utils.log import get_logger
 from x10.utils.model import X10BaseModel
 
 LOGGER = get_logger(__name__)
-CLIENT_TIMEOUT = ClientTimeout(total=DEFAULT_REQUEST_TIMEOUT_SECONDS)
+CLIENT_TIMEOUT = Timeouts(request_timeout=DEFAULT_REQUEST_TIMEOUT_SECONDS)
 
 ApiResponseType = TypeVar(
     "ApiResponseType", bound=Union[int, X10BaseModel, Sequence[X10BaseModel]]
@@ -144,7 +144,7 @@ def get_url(
 
 
 async def send_get_request(
-    session: aiohttp.ClientSession,
+    client:HTTPClient,
     url: str,
     model_class: Type[ApiResponseType],
     *,
@@ -154,14 +154,14 @@ async def send_get_request(
 ) -> WrappedApiResponse[ApiResponseType]:
     headers = __get_headers(api_key=api_key, request_headers=request_headers)
     LOGGER.debug("Sending GET %s", url)
-    async with session.get(url, headers=headers) as response:
-        response_text = await response.text()
-        handle_known_errors(url, response_code_to_exception, response, response_text)
-        return parse_response_to_model(response_text, model_class)
+    response = await client.get(url, headers=headers)
+    response_text = await response.text()
+    handle_known_errors(url, response_code_to_exception, response, response_text)
+    return parse_response_to_model(response_text, model_class)
 
 
 async def send_post_request(
-    session: aiohttp.ClientSession,
+    client: HTTPClient,
     url: str,
     model_class: Type[ApiResponseType],
     *,
@@ -172,20 +172,20 @@ async def send_post_request(
 ) -> WrappedApiResponse[ApiResponseType]:
     headers = __get_headers(api_key=api_key, request_headers=request_headers)
     LOGGER.debug("Sending POST %s, headers=%s", url, headers)
-    async with session.post(url, json=json, headers=headers) as response:
-        response_text = await response.text()
-        handle_known_errors(url, response_code_to_exception, response, response_text)
-        response_model = parse_response_to_model(response_text, model_class)
-        if (response_model.status != ResponseStatus.OK.value) or (
-            response_model.error is not None
-        ):
-            LOGGER.error("Error response from POST %s: %s", url, response_model.error)
-            raise ValueError(f"Error response from POST {url}: {response_model.error}")
-        return response_model
+    response = await client.post(url, json=json, headers=headers)
+    response_text = await response.text()
+    handle_known_errors(url, response_code_to_exception, response, response_text)
+    response_model = parse_response_to_model(response_text, model_class)
+    if (response_model.status != ResponseStatus.OK.value) or (
+        response_model.error is not None
+    ):
+        LOGGER.error("Error response from POST %s: %s", url, response_model.error)
+        raise ValueError(f"Error response from POST {url}: {response_model.error}")
+    return response_model
 
 
 async def send_patch_request(
-    session: aiohttp.ClientSession,
+    client:HTTPClient,
     url: str,
     model_class: Type[ApiResponseType],
     *,
@@ -196,17 +196,17 @@ async def send_patch_request(
 ) -> WrappedApiResponse[ApiResponseType]:
     headers = __get_headers(api_key=api_key, request_headers=request_headers)
     LOGGER.debug("Sending PATCH %s, headers=%s, data=%s", url, headers, json)
-    async with session.patch(url, json=json, headers=headers) as response:
-        response_text = await response.text()
-        if response_text == "":
-            LOGGER.error("Empty HTTP %s response from PATCH %s", response.status, url)
-            response_text = '{"status": "OK"}'
-        handle_known_errors(url, response_code_to_exception, response, response_text)
-        return parse_response_to_model(response_text, model_class)
+    response = await client.patch(url, json=json, headers=headers)
+    response_text = await response.text()
+    if response_text == "":
+        LOGGER.error("Empty HTTP %s response from PATCH %s", response.status, url)
+        response_text = '{"status": "OK"}'
+    handle_known_errors(url, response_code_to_exception, response, response_text)
+    return parse_response_to_model(response_text, model_class)
 
 
 async def send_delete_request(
-    session: aiohttp.ClientSession,
+    client:HTTPClient,
     url: str,
     model_class: Type[ApiResponseType],
     *,
@@ -216,16 +216,15 @@ async def send_delete_request(
 ):
     headers = __get_headers(api_key=api_key, request_headers=request_headers)
     LOGGER.debug("Sending DELETE %s, headers=%s", url, headers)
-    async with session.delete(url, headers=headers) as response:
-        response_text = await response.text()
-        handle_known_errors(url, response_code_to_exception, response, response_text)
-        return parse_response_to_model(response_text, model_class)
-
+    response = await client.delete(url, headers=headers)
+    response_text = await response.text()
+    handle_known_errors(url, response_code_to_exception, response, response_text)
+    return parse_response_to_model(response_text, model_class)
 
 def handle_known_errors(
     url,
     response_code_handler: Optional[Dict[int, Type[Exception]]],
-    response: ClientResponse,
+    response: HttpResponse,
     response_text: str,
 ):
     if response.status == 401:
