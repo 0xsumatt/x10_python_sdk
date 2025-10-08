@@ -36,13 +36,7 @@ class TestOrderBook(TestCase):
 
     def test_calculate_impact_partial_buy(self):
         notional = decimal.Decimal("105")
-<<<<<<< HEAD
         expected_amount = decimal.Decimal("1") + decimal.Decimal("4") / decimal.Decimal("102")
-=======
-        expected_amount = decimal.Decimal("1") + decimal.Decimal("4") / decimal.Decimal(
-            "102"
-        )
->>>>>>> change-to-ruff
         expected_average_price = notional / expected_amount
         result = self.orderbook.calculate_price_impact_notional(notional, "BUY")
         self.assertEqual(result.amount, expected_amount)
@@ -50,13 +44,7 @@ class TestOrderBook(TestCase):
 
     def test_calculate_impact_partial_sell(self):
         notional = decimal.Decimal("110")
-<<<<<<< HEAD
         expected_amount = decimal.Decimal(1) + decimal.Decimal("10") / decimal.Decimal("99")
-=======
-        expected_amount = decimal.Decimal(1) + decimal.Decimal("10") / decimal.Decimal(
-            "99"
-        )
->>>>>>> change-to-ruff
         expected_average_price = notional / expected_amount
         result = self.orderbook.calculate_price_impact_notional(notional, "SELL")
         self.assertEqual(result.amount, expected_amount)
@@ -71,15 +59,7 @@ class TestOrderBook(TestCase):
         self.assertEqual(result.price, expected_average_price)
 
     def test_calculate_price_impact_total_match_buy(self):
-<<<<<<< HEAD
         notional = decimal.Decimal("101") + decimal.Decimal("2") * decimal.Decimal("102") + decimal.Decimal("103")
-=======
-        notional = (
-            decimal.Decimal("101")
-            + decimal.Decimal("2") * decimal.Decimal("102")
-            + decimal.Decimal("103")
-        )
->>>>>>> change-to-ruff
         expected_amount = decimal.Decimal("4")
         expected_average_price = notional / expected_amount
         result = self.orderbook.calculate_price_impact_notional(notional, "BUY")
@@ -119,13 +99,9 @@ class TestOrderBook(TestCase):
         result = self.orderbook.calculate_price_impact_qty(qty, "BUY")
 
         self.assertIsNotNone(result, "Result should not be None for partial fill.")
-<<<<<<< HEAD
-        self.assertEqual(result.amount, qty, "Filled amount should match requested qty.")
-=======
         self.assertEqual(
             result.amount, qty, "Filled amount should match requested qty."
         )
->>>>>>> change-to-ruff
 
         expected_average_price = decimal.Decimal("101.5")
         self.assertEqual(result.price, expected_average_price)
@@ -143,13 +119,9 @@ class TestOrderBook(TestCase):
         result = self.orderbook.calculate_price_impact_qty(qty, "SELL")
 
         self.assertIsNotNone(result, "Result should not be None for partial fill.")
-<<<<<<< HEAD
-        self.assertEqual(result.amount, qty, "Filled amount should match requested qty.")
-=======
         self.assertEqual(
             result.amount, qty, "Filled amount should match requested qty."
         )
->>>>>>> change-to-ruff
 
         expected_average_price = decimal.Decimal("99.5")
         self.assertEqual(result.price, expected_average_price)
@@ -167,17 +139,12 @@ class TestOrderBook(TestCase):
         qty = decimal.Decimal("4")
         result = self.orderbook.calculate_price_impact_qty(qty, "BUY")
 
-<<<<<<< HEAD
-        self.assertIsNotNone(result, "Result should not be None when liquidity matches exactly.")
-        self.assertEqual(result.amount, qty, "Filled amount should match requested qty.")
-=======
         self.assertIsNotNone(
             result, "Result should not be None when liquidity matches exactly."
         )
         self.assertEqual(
             result.amount, qty, "Filled amount should match requested qty."
         )
->>>>>>> change-to-ruff
 
         expected_average_price = decimal.Decimal("102")
         self.assertEqual(result.price, expected_average_price)
@@ -195,13 +162,9 @@ class TestOrderBook(TestCase):
         qty = decimal.Decimal("4")
         result = self.orderbook.calculate_price_impact_qty(qty, "SELL")
 
-<<<<<<< HEAD
-        self.assertIsNotNone(result, "Result should not be None when liquidity matches exactly.")
-=======
         self.assertIsNotNone(
             result, "Result should not be None when liquidity matches exactly."
         )
->>>>>>> change-to-ruff
         self.assertEqual(result.amount, qty)
 
         expected_average_price = decimal.Decimal("99")
@@ -214,13 +177,9 @@ class TestOrderBook(TestCase):
         """
         qty = decimal.Decimal("5")
         result = self.orderbook.calculate_price_impact_qty(qty, "BUY")
-<<<<<<< HEAD
-        self.assertIsNone(result, "Result should be None when there's insufficient ask liquidity.")
-=======
         self.assertIsNone(
             result, "Result should be None when there's insufficient ask liquidity."
         )
->>>>>>> change-to-ruff
 
     def test_calculate_qty_impact_insufficient_liquidity_sell(self):
         """
@@ -229,13 +188,9 @@ class TestOrderBook(TestCase):
         """
         qty = decimal.Decimal("5")
         result = self.orderbook.calculate_price_impact_qty(qty, "SELL")
-<<<<<<< HEAD
-        self.assertIsNone(result, "Result should be None when there's insufficient bid liquidity.")
-=======
         self.assertIsNone(
             result, "Result should be None when there's insufficient bid liquidity."
         )
->>>>>>> change-to-ruff
 
     def test_calculate_qty_impact_invalid_qty(self):
         """
