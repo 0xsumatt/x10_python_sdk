@@ -4,6 +4,7 @@ from decimal import Decimal
 from typing import Callable, Optional, Tuple
 
 from fast_stark_crypto import get_order_msg_hash
+
 from x10.perpetual.accounts import StarkPerpetualAccount
 from x10.perpetual.amounts import (
     ROUNDING_BUY_CONTEXT,
@@ -25,8 +26,8 @@ from x10.perpetual.orders import (
     StarkSettlementModel,
     TimeInForce,
 )
-from x10.utils.date import to_epoch_millis, utc_now
 from x10.utils import generate_nonce
+from x10.utils.date import to_epoch_millis, utc_now
 
 
 def create_order_object(
@@ -45,23 +46,28 @@ def create_order_object(
     nonce: Optional[int] = None,
     builder_fee: Optional[Decimal] = None,
     builder_id: Optional[int] = None,
+    reduce_only: bool = False,
 ) -> PerpetualOrderModel:
+    """
+    Creates an order object to be placed on the exchange using the `place_order` method.
+    """
+
     if expire_time is None:
         expire_time = utc_now() + timedelta(hours=1)
 
     fees = account.trading_fee.get(market.name, DEFAULT_FEES)
 
     return __create_order_object(
-        market,
-        amount_of_synthetic,
-        price,
-        side,
-        account.vault,
-        fees,
-        account.sign,
-        account.public_key,
-        False,
-        expire_time,
+        market=market,
+        synthetic_amount=amount_of_synthetic,
+        price=price,
+        side=side,
+        collateral_position_id=account.vault,
+        fees=fees,
+        signer=account.sign,
+        public_key=account.public_key,
+        exact_only=False,
+        expire_time=expire_time,
         post_only=post_only,
         previous_order_external_id=previous_order_external_id,
         order_external_id=order_external_id,
@@ -71,6 +77,7 @@ def create_order_object(
         nonce=nonce,
         builder_fee=builder_fee,
         builder_id=builder_id,
+        reduce_only=reduce_only,
     )
 
 
@@ -83,6 +90,7 @@ def __create_order_object(
     fees: TradingFeeModel,
     signer: Callable[[int], Tuple[int, int]],
     public_key: int,
+    starknet_domain: StarknetDomain,
     exact_only: bool = False,
     expire_time: Optional[datetime] = None,
     post_only: bool = False,
@@ -90,47 +98,33 @@ def __create_order_object(
     order_external_id: Optional[str] = None,
     time_in_force: TimeInForce = TimeInForce.GTT,
     self_trade_protection_level: SelfTradeProtectionLevel = SelfTradeProtectionLevel.ACCOUNT,
-    starknet_domain: StarknetDomain = None,
     nonce: Optional[int] = None,
     builder_fee: Optional[Decimal] = None,
     builder_id: Optional[int] = None,
-    reduce_only:bool= False
+    reduce_only: bool = False,
 ) -> PerpetualOrderModel:
     if exact_only:
         raise NotImplementedError("`exact_only` option is not supported yet")
 
     if expire_time is None:
-        raise ValueError("expected expire time, it must be provided")
-
+        raise ValueError("`expire_time` must be provided")
     if nonce is None:
         nonce = generate_nonce()
     is_buying_synthetic = side == OrderSide.BUY
-    rounding_context = (
-        ROUNDING_BUY_CONTEXT if is_buying_synthetic else ROUNDING_SELL_CONTEXT
-    )
+    rounding_context = ROUNDING_BUY_CONTEXT if is_buying_synthetic else ROUNDING_SELL_CONTEXT
 
-    collateral_amount_human = HumanReadableAmount(
-        synthetic_amount * price, market.collateral_asset
-    )
-    synthetic_amount_human = HumanReadableAmount(
-        synthetic_amount, market.synthetic_asset
-    )
-
+    collateral_amount_human = HumanReadableAmount(synthetic_amount * price, market.collateral_asset)
+    synthetic_amount_human = HumanReadableAmount(synthetic_amount, market.synthetic_asset)
     total_fee = fees.taker_fee_rate + (builder_fee if builder_fee is not None else 0)
-
     fee_amount_human = HumanReadableAmount(
-        total_fee * collateral_amount_human.value, market.collateral_asset
+        total_fee * collateral_amount_human.value,
+        market.collateral_asset,
     )
     fee_rate = fees.taker_fee_rate
-    stark_collateral_amount: StarkAmount = collateral_amount_human.to_stark_amount(
-        rounding_context=rounding_context
-    )
-    stark_synthetic_amount: StarkAmount = synthetic_amount_human.to_stark_amount(
-        rounding_context=rounding_context
-    )
-    stark_fee_amount: StarkAmount = fee_amount_human.to_stark_amount(
-        rounding_context=ROUNDING_FEE_CONTEXT
-    )
+
+    stark_collateral_amount: StarkAmount = collateral_amount_human.to_stark_amount(rounding_context=rounding_context)
+    stark_synthetic_amount: StarkAmount = synthetic_amount_human.to_stark_amount(rounding_context=rounding_context)
+    stark_fee_amount: StarkAmount = fee_amount_human.to_stark_amount(rounding_context=ROUNDING_FEE_CONTEXT)
 
     if is_buying_synthetic:
         stark_collateral_amount = stark_collateral_amount.negate()
