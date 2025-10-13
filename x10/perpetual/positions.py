@@ -1,25 +1,29 @@
 from decimal import Decimal
-from enum import Enum
+from strenum import StrEnum
 from typing import Optional
 
 from x10.utils.model import X10BaseModel
 
 
-class ExitType(Enum):
+class ExitType(StrEnum):
     TRADE = "TRADE"
     LIQUIDATION = "LIQUIDATION"
     ADL = "ADL"
 
 
-class PositionSide(Enum):
+class PositionSide(StrEnum):
     LONG = "LONG"
     SHORT = "SHORT"
 
+class PositionStatus(StrEnum):
+    OPENED = "OPENED"
+    CLOSED = "CLOSED"
 
 class PositionModel(X10BaseModel):
     id: int
     account_id: int
     market: str
+    status:PositionStatus
     side: PositionSide
     leverage: Decimal
     size: Decimal

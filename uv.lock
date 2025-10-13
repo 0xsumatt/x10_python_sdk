@@ -689,19 +689,33 @@ wheels = [
 
 [[package]]
 name = "fast-stark-crypto"
-version = "0.1.0"
+version = "0.3.7"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/01/a3/1c4eaf01ccb50ae4855e18e109c10c95e28d2116ac0b1d5583227b9d060b/fast_stark_crypto-0.1.0.tar.gz", hash = "sha256:32bc9db69a1601c14dd3db70112db788f32694734811b507672613e8c8ddd09b", size = 4257 }
+sdist = { url = "https://files.pythonhosted.org/packages/5e/c7/0076209bd857b54237d373a4324a40b2d86094321cf5dd2ae8e32610d081/fast_stark_crypto-0.3.7.tar.gz", hash = "sha256:07e900163df299ce64f2919d44bfc028eb982538b3835f0d0779a8c932054723", size = 47289 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/61/26/98434d1f47eb8017f0550bed3af420bfa8e862dd536e3b5e66953169061d/fast_stark_crypto-0.1.0-cp310-cp310-macosx_11_0_arm64.whl", hash = "sha256:c514dadde060d52ad75f6948d034d32e2bc399d279e5d6218817528f85f6d0c7", size = 380727 },
-    { url = "https://files.pythonhosted.org/packages/97/77/9cd0f3afd91aa7ec94a9b340ea5d82e1a4baf88b88762b62082dbfab26d7/fast_stark_crypto-0.1.0-cp310-cp310-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:325e99e77bf1835321b2be895be999addce4eed627ee9c1d2973fdac2a016610", size = 1155596 },
-    { url = "https://files.pythonhosted.org/packages/d2/40/6ee68c847c08a557d0cfd0626132027092699a7fd88c77d02837fdc2108e/fast_stark_crypto-0.1.0-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:6ec29d6b4946d32e091dd603a84be965eb2e7ba5ee5e352964e0dd09e9fde57d", size = 1167146 },
-    { url = "https://files.pythonhosted.org/packages/3e/81/d6bb0fbebe4deaff8dfece7fd610cdfc65f18e63b8fb39ffd04b95973211/fast_stark_crypto-0.1.0-cp311-cp311-macosx_11_0_arm64.whl", hash = "sha256:1c78896031a2d30cdbc3710adfa2abbaa9fb685032236eb98784880e7f8b4f37", size = 380804 },
-    { url = "https://files.pythonhosted.org/packages/36/60/d210a4ada09434049e1c86e5693b6c6a26bba132c902dc88138554b43afd/fast_stark_crypto-0.1.0-cp311-cp311-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:51de43c40b96cf3a19ac47e871f44bee53fe30a7577bb399df801882ad232d83", size = 1155647 },
-    { url = "https://files.pythonhosted.org/packages/d4/2b/f12a0561e0577559cf0059dfbf6a3a7762b092da36e603b8415e8525f63e/fast_stark_crypto-0.1.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:20c1365bd1c7b0adc9469b0113ee416a02c7fffe2a1a24da4739a304313fee1e", size = 1167219 },
-    { url = "https://files.pythonhosted.org/packages/22/cf/92f994041419894a2bb709a7f4f963e55eab116a70c80d42bbd20d8a5cfc/fast_stark_crypto-0.1.0-cp312-cp312-macosx_11_0_arm64.whl", hash = "sha256:418253a38b3e734951435c0199f1feef82a0855134029829f36c68a3569e674c", size = 380029 },
-    { url = "https://files.pythonhosted.org/packages/24/b5/330c331f6630fad219c48a08f4fbb62fa3009cff7adce7243bdb88f180ab/fast_stark_crypto-0.1.0-cp312-cp312-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:d751fac4c7365f067a803f5d5388b581d0556c9cdc79f52327068fccdb1b4f8d", size = 1155445 },
-    { url = "https://files.pythonhosted.org/packages/76/13/b021e2a593156964df98822eab5d2b631c02b31dc226bf6ebfeac98421db/fast_stark_crypto-0.1.0-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:708116c07979a189c2d40ef4bb5e924117936a6b9b0c1359dd4e04b134b1140d", size = 1167097 },
+    { url = "https://files.pythonhosted.org/packages/c9/82/b669d871c2df7d5b528e046e2b00a6ab1ffb71a5ce1c5b4e390e0b5f44bb/fast_stark_crypto-0.3.7-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:1abb7339ebec37b1443a6d847c57f3fc087943559342201afda862ad08c1793a", size = 504872 },
+    { url = "https://files.pythonhosted.org/packages/49/13/c6f4ff42bd99fa48bd65eddaca33dd8da0eb52d63bcb7f20f85f292cf5da/fast_stark_crypto-0.3.7-cp310-cp310-manylinux_2_24_aarch64.whl", hash = "sha256:72988e8b4195b9fc318f15492b563d41865fada2261fc89e5ffb0bfdae21967b", size = 485308 },
+    { url = "https://files.pythonhosted.org/packages/fe/82/86a9f93ed26cfa4515e688875fdb055e45e08c7100ddb0fc484195206553/fast_stark_crypto-0.3.7-cp310-cp310-musllinux_1_2_aarch64.whl", hash = "sha256:6840e718d48ac582f829f540673c8a376553e887d5923217d6c3f896906bfab8", size = 665418 },
+    { url = "https://files.pythonhosted.org/packages/fb/87/2b1ca45ea915a10d605634b33b0c09342bb91dc60552ddf69a4543239283/fast_stark_crypto-0.3.7-cp310-cp310-musllinux_1_2_x86_64.whl", hash = "sha256:c2cf2541d07708157ab5a3c3ff81ef4264d27efaa7a246de7ab55b650b9e4a9d", size = 659148 },
+    { url = "https://files.pythonhosted.org/packages/16/6c/604aca1224fadcbeaf781e5d8d7e4dc5424a2ba80c0656b4283569e5c28c/fast_stark_crypto-0.3.7-cp310-cp310-win_amd64.whl", hash = "sha256:a3b067a6bf8da5606e0b08f6128b8cb8c782041e7b2bf5b9cd91d9cfc90ae4d6", size = 352796 },
+    { url = "https://files.pythonhosted.org/packages/df/c7/2e463e0ca29812c8e034c16aaa36116899a6a73d990402ee87dce3e5c7f3/fast_stark_crypto-0.3.7-cp311-cp311-macosx_11_0_arm64.whl", hash = "sha256:4242889afd8b27cafe81591fad890ad36851258d2e74a3475fbd22646040f241", size = 448582 },
+    { url = "https://files.pythonhosted.org/packages/5c/fc/b4c0d63a762308f3002eec7f346ce40a91ea78190d20b5c2386b7a1e13a2/fast_stark_crypto-0.3.7-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:1137fa11cc6a85a10295a95c129c15e23e7b6c23e55be157abdb29208cd3971e", size = 504735 },
+    { url = "https://files.pythonhosted.org/packages/11/09/9619c31fa7ee01f2a9e0cef1dc64ebf34264a449aa9f55cb92a87762f58d/fast_stark_crypto-0.3.7-cp311-cp311-manylinux_2_24_aarch64.whl", hash = "sha256:c82d73356e6ebb90c4adf947da4e8e5c078f226cb3d3277fd6b017a873c1cb2d", size = 485107 },
+    { url = "https://files.pythonhosted.org/packages/49/40/31ca7183bec202edca35c9b2553bd633e0ae316aed554acaa3a594d5b55a/fast_stark_crypto-0.3.7-cp311-cp311-musllinux_1_2_aarch64.whl", hash = "sha256:83aa78b04d0925648e5157621272a1f1936547cd767b2d5162b0c6ba1b05126e", size = 665126 },
+    { url = "https://files.pythonhosted.org/packages/0e/5a/b8eabc7b54bfe87fe5123131232c3aa355566c43d71a1712c1bef9a0944f/fast_stark_crypto-0.3.7-cp311-cp311-musllinux_1_2_x86_64.whl", hash = "sha256:7994b9f972f9eaf77e353f6de10ef0dda4c76b2a4092392af40f8b43527ea12f", size = 658729 },
+    { url = "https://files.pythonhosted.org/packages/6a/84/294cbb99c88cd7da71fb06f4e438d476e9a5d047129d09370c1a938abc48/fast_stark_crypto-0.3.7-cp311-cp311-win_amd64.whl", hash = "sha256:3b95af5a0c1410fb9f03e534af71e97d04eada206e885d84d64eadbb73c84397", size = 352678 },
+    { url = "https://files.pythonhosted.org/packages/9f/10/e098df1b782cce937dbe6aaaf720409b93eaa3a3507618f9e9ba79ce155a/fast_stark_crypto-0.3.7-cp312-cp312-macosx_11_0_arm64.whl", hash = "sha256:b1a36ab38b0fb507a09285dbc324dd9eb69b98078c08178b3e25a04189640afe", size = 448167 },
+    { url = "https://files.pythonhosted.org/packages/be/b4/3e921a79a9e495374cf5fa2b86563e49cfd4c71e1649f7f6007aedd4efb8/fast_stark_crypto-0.3.7-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:01aaa78571ae062e45fb9fa91de465333b66362e3bb7f72b87e23b4438ec13a0", size = 504561 },
+    { url = "https://files.pythonhosted.org/packages/fb/5f/ada0e645cdf480e04890f39c69ed2efc3f015517ddc0a9ea7088f36f9cf0/fast_stark_crypto-0.3.7-cp312-cp312-manylinux_2_24_aarch64.whl", hash = "sha256:02595fc95788ec28c6a9f1d062e3fd5b3f7ce24755a2a59832dac475a5334e96", size = 484378 },
+    { url = "https://files.pythonhosted.org/packages/5e/9e/0c93a8b7edd909b8e6d449f9f95210d2e6034484926eff4ba919a9a9322b/fast_stark_crypto-0.3.7-cp312-cp312-musllinux_1_2_aarch64.whl", hash = "sha256:d55eee6b2144957ce5c0fe28979832b9d38c879272b7a864380fc0c44038b6ae", size = 664452 },
+    { url = "https://files.pythonhosted.org/packages/ca/0e/ac09862a180d390da8193771266e5dab6baabbabbcabb7d591ca84befa94/fast_stark_crypto-0.3.7-cp312-cp312-musllinux_1_2_x86_64.whl", hash = "sha256:6035ac04e60b74c498fe0475e4dd91aa51a48376c3e29373299b07fa84efc43f", size = 658132 },
+    { url = "https://files.pythonhosted.org/packages/9d/53/29b0a3d8ffe122c96e6cb60337078e7f52b91d668f2e7203accc8c1f12cd/fast_stark_crypto-0.3.7-cp312-cp312-win_amd64.whl", hash = "sha256:0eb5185591b27873627456b53f80b36670a61728d99069710f27008ac84563e5", size = 352574 },
+    { url = "https://files.pythonhosted.org/packages/9b/75/9d4b16592d8bd7e0928b290ceb13ed1957aca398dca606fc945f1a99f33b/fast_stark_crypto-0.3.7-cp313-cp313-macosx_11_0_arm64.whl", hash = "sha256:64e95bfa8ac5864466f55e4a8d4742eca6f048e1d45ba0a2d0141575cb97234b", size = 448008 },
+    { url = "https://files.pythonhosted.org/packages/36/63/43240ea094d9f0a19a826eb26306add4648ab094f1bf1c075c3203958a12/fast_stark_crypto-0.3.7-cp313-cp313-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:1e16eb65987c8f379488e38ac733f457bf7c44ff4cffad73f85b2e6f00aff3cf", size = 504601 },
+    { url = "https://files.pythonhosted.org/packages/af/5c/6772999f28d5377e780fc26dbd609ee9a12bbd380efb43439ebd49ef2bd9/fast_stark_crypto-0.3.7-cp313-cp313-manylinux_2_24_aarch64.whl", hash = "sha256:1f3959f65224717af48013be78f2d3d0ef9f9cf9c3ca10ef2370f9559b4b3c4f", size = 484592 },
+    { url = "https://files.pythonhosted.org/packages/03/26/5110c1f56fd70cbae59bacb4a28395fb9f6b197cd12afb7272be60a2d8bb/fast_stark_crypto-0.3.7-cp313-cp313-musllinux_1_2_aarch64.whl", hash = "sha256:22f12cd2e589c704ae0f9e04e83e11c28c432e1e8913807c3644663051eac16c", size = 664692 },
+    { url = "https://files.pythonhosted.org/packages/e1/2d/ed55224c4d6a32abd7f6b66a1f49f562848718ffb885bec4bf2f2d77053c/fast_stark_crypto-0.3.7-cp313-cp313-musllinux_1_2_x86_64.whl", hash = "sha256:e7fa109daa5ac73376f2cf02ab393463193e9d86be2f4a46aa202aa71c5ca1f1", size = 658326 },
+    { url = "https://files.pythonhosted.org/packages/99/b2/9e1ec7934577a44218e3fadd8687723ead0c8744a196a80f303bbbee09e0/fast_stark_crypto-0.3.7-cp313-cp313-win_amd64.whl", hash = "sha256:10a6eed0a08a249b23ccd286fa1f3df6cab99db12653dfc987a56076c65dc9b0", size = 352555 },
 ]
 
 [[package]]
@@ -1983,6 +1997,15 @@ wheels = [
 ]
 
 [[package]]
+name = "strenum"
+version = "0.4.15"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/85/ad/430fb60d90e1d112a62ff57bdd1f286ec73a2a0331272febfddd21f330e1/StrEnum-0.4.15.tar.gz", hash = "sha256:878fb5ab705442070e4dd1929bb5e2249511c0bcf2b0eeacf3bcd80875c82eff", size = 23384 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/81/69/297302c5f5f59c862faa31e6cb9a4cd74721cd1e052b38e464c5b402df8b/StrEnum-0.4.15-py3-none-any.whl", hash = "sha256:a30cda4af7cc6b5bf52c8055bc4bf4b2b6b14a93b574626da33df53cf7740659", size = 8851 },
+]
+
+[[package]]
 name = "sympy"
 version = "1.12"
 source = { registry = "https://pypi.org/simple" }
@@ -2231,6 +2254,7 @@ dependencies = [
     { name = "python-dotenv" },
     { name = "pyyaml" },
     { name = "sortedcontainers" },
+    { name = "strenum" },
     { name = "sympy" },
     { name = "uvloop" },
     { name = "web3" },
@@ -2262,7 +2286,7 @@ requires-dist = [
     { name = "ecdsa", specifier = "==0.18.0" },
     { name = "eth-account", specifier = "==0.11.2" },
     { name = "eth-typing", specifier = "==4.4.0" },
-    { name = "fast-stark-crypto", specifier = "==0.1.0" },
+    { name = "fast-stark-crypto", specifier = "==0.3.7" },
     { name = "fastecdsa", specifier = ">=3.0.1" },
     { name = "freezegun", specifier = ">=1.4.0" },
     { name = "mpmath", specifier = "==1.3.0" },
@@ -2275,6 +2299,7 @@ requires-dist = [
     { name = "python-dotenv", specifier = ">=1.0.1" },
     { name = "pyyaml", specifier = "==6.0.1" },
     { name = "sortedcontainers", specifier = "==2.4.0" },
+    { name = "strenum", specifier = ">=0.4.15" },
     { name = "sympy", specifier = "==1.12" },
     { name = "uvloop", specifier = ">=0.21.0" },
     { name = "web3", specifier = "==6.20.1" },
