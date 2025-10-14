@@ -31,7 +31,6 @@ dependencies = [
     "sortedcontainers==2.4.0",
     "sympy==1.12",
     "uvloop>=0.21.0",
-    "web3==6.20.1",
     "pydantic>=2.7.4",
     "fastecdsa>=3.0.1",
     "pytest>=7.4.3",
