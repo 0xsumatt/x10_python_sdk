@@ -51,9 +51,14 @@ class AccountModule(BaseModule):
             query["side"] = position_side
         url = self._get_url(
             "/user/positions", query=query if query else None)
-        print(url)
-        
-    
+       
+        return await send_get_request(
+            await self.get_client(),
+            url,
+            List[PositionModel],
+            api_key=self._get_api_key(),
+        )
+
     async def get_positions_history(
         self,
         market_names: Optional[List[str]] = None,
