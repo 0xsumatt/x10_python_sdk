@@ -44,10 +44,14 @@ class AccountModule(BaseModule):
         """
         https://api.docs.extended.exchange/#get-positions
         """
-
+        query = {}
+        if market_names is not None:
+            query["market"] = market_names
+        if position_side is not None:
+            query["side"] = position_side
         url = self._get_url(
-            "/user/positions", query={"market": market_names, "side": position_side}
-        )
+            "/user/positions", query=query if query else None)
+        
         return await send_get_request(
             await self.get_client(),
             url,
