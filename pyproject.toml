@@ -29,7 +29,7 @@ dependencies = [
     "pyhamcrest>=2.1.0",
     "pyyaml==6.0.1",
     "sortedcontainers==2.4.0",
-    "sympy==1.11",
+    "sympy>=1.11",
     "uvloop>=0.21.0",
     "pydantic>=2.7.4",
     "fastecdsa>=3.0.1",
