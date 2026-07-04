@@ -42,9 +42,9 @@ TESTNET_CONFIG = EndpointConfig(
 
 MAINNET_CONFIG = EndpointConfig(
     chain_rpc_url="https://cloudflare-eth.com",
-    api_base_url="https://api.extended.exchange/api/v1",
-    stream_url="wss://api.extended.exchange/stream.extended.exchange/v1",
-    onboarding_url="https://api.extended.exchange",
+    api_base_url="https://api.starknet.extended.exchange/api/v1",
+    stream_url="wss://api.starknet.extended.exchange/stream.extended.exchange/v1",
+    onboarding_url="https://api.starknet.extended.exchange",
     signing_domain="extended.exchange",
     collateral_asset_contract="0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
     asset_operations_contract="0x1cE5D7f52A8aBd23551e91248151CA5A13353C65",
